@@ -1,0 +1,46 @@
+pluginDev:
+  image: xolocalvendors/fix-gallery-over-500
+  command: -t
+  volumes:
+    - ../src:/opt/app/current/src
+    - ../test:/opt/app/current/test
+    - ../coverage:/opt/app/current/coverage
+  links:
+    - pgbox
+    - esbox
+    - rabbitbox
+pluginDebug:
+  image: xolocalvendors/fix-gallery-over-500
+  command: -dt
+  ports:
+    - "5858:5858"
+  volumes:
+    - ../src:/opt/app/current/src
+    - ../test:/opt/app/current/test
+  links:
+    - pgbox
+    - esbox
+    - rabbitbox
+pluginJenkins:
+  image: xolocalvendors/fix-gallery-over-500
+  command: -j
+  links:
+    - pgbox
+    - esbox
+    - rabbitbox
+pgbox:
+  image: xolocalvendors/pgbox:latest
+  environment:
+    - LANG=en_US.UTF-8
+    - POSTGRES_PASSWORD=password
+  ports:
+    - "5432:5432"
+esbox:
+  image: xolocalvendors/esbox:1.7.2
+  ports:
+    - "9200:9200"
+rabbitbox:
+   image: xolocalvendors/rabbitbox:latest
+   ports:
+     - "5672:5672"
+     - "15672:15672"
