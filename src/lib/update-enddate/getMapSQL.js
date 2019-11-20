@@ -1,5 +1,7 @@
-const getSrvSQL = (storefrontId)`with tmp_services as (
-	select data->'services'->0 as data from sales_profiles
+'use strict';
+
+const getSrvSQL = (storefrontId, srvIdx) => `with tmp_services as (
+	select data->'services'->${srvIdx} as data from sales_profiles
 	where data->>'storefrontId' = '${storefrontId}'
 )
 select ps.data->>'storefrontId' as "storefrontId",
@@ -16,7 +18,7 @@ and service->>'id'=ps.data->>'salesProfileId'
 and service->>'purchaseStatusCode'='PAID'
 and coalesce(service->>'subscriptionId','') <> ''`;
 
-const getAddOnSQL = (storefrontId, markCode, srvIdx, addonIdx)`with tmp_addons as (
+const getAddOnSQL = (storefrontId, markCode, srvIdx, addonIdx) => `with tmp_addons as (
 	select data->'services'->${srvIdx}->'addOns'->${addonIdx} as data from sales_profiles
 	where data->>'storefrontId' = '${storefrontId}'
 )
@@ -40,3 +42,8 @@ and addonmap.data->>'salesProfileId' = service->>'id'
 and addonmap.data->>'newAddOnCode' = addOn->>'sku'
 and addOn->>'status' <> 'INACTIVE'
 and coalesce(addOn->>'subscriptionId','') <> ''`;
+
+module.exports = {
+    getSrvSQL,
+    getAddOnSQL
+};

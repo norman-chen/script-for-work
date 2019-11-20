@@ -1,4 +1,9 @@
 {
 	"plugins" : ["xogroup"],
-	"extends" : ["plugin:xogroup/hapijs"]
-}
+	"extends" : ["plugin:xogroup/hapijs"],
+	"parserOptions": {
+	  "ecmaFeatures": {
+		"experimentalObjectRestSpread": true
+	  }
+	}
+  }

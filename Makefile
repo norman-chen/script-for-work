@@ -45,6 +45,6 @@ jenkins-cover:
 	CODECLIMATE_REPO_TOKEN=abcXYZ123 codeclimate-test-reporter < coverage/lcov.info
 
 lint:
-	node_modules/.bin/eslint --fix src/ test/
+	node_modules/.bin/eslint --fix src/lib/
 
 .PHONY: test debug-test clean install docker-build run run-debug-test jenkins-run jenkins-build jenkins-cover lint docker-clean
