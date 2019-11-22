@@ -1,15 +1,40 @@
 'use strict';
 
 const fs = require('fs');
+const xoReq = new(require('xo-request'))();
 
 const {
     notMatchMarketPath,
     updatedByGPPath,
     freeSrvPath,
-    freeAddonPath
+    freeAddonPath,
+    requestInfo,
+    failToUpdatePath
 } = require('./constants');
 
 const { updateMappedSrv, updateMappedAddon } = require('./updateMapped');
+
+const req = (sales, updateArr) => {
+    const { url, apikey, token } = requestInfo;
+
+    const options = {
+        payload: {
+            services : sales.services,
+            accountId: sales.accountId
+        },
+        headers: {
+            Authorization: token
+        }
+    };
+    // console.dir(options, {depth: 9})
+    return
+    return xoReq.put(`${url}/${sales.id}?apikey=${apikey}`, options)
+        .catch((error) => {
+            updateArr.forEach((item) => {
+                fs.appendFileSync(failToUpdatePath, `${item.LocationID},${item.SubscriptionEndDate},${item.MarketCode},${item.SKU},${item.Product},${item.CategoryCode},${error.message}\n`);
+            });
+        });
+};
 
 module.exports = async(sales, updateArr) => {
     if (!sales) { return; }
@@ -87,5 +112,7 @@ module.exports = async(sales, updateArr) => {
         }
     }
 
-    // req(sales.service)
+    return req(sales, updateArr)
+    // console.dir(sales, {depth: 99})
+    // console.log('=========================')
 };

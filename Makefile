@@ -16,5 +16,5 @@ lint:
 	node_modules/.bin/eslint --fix src/lib/
 
 update-enddate:
-	node src/lib/update-enddate/index.js
+	node src/lib/update-enddate/index.js >> log.txt
 

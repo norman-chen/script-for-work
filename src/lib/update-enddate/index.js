@@ -18,7 +18,8 @@ const {
     existManyButNoWin,
     existManyLive,
     freeSrvPath,
-    freeAddonPath
+    freeAddonPath,
+    failToUpdatePath
 } = require('./constants');
 
 const updateSales = require('./updateList');
@@ -33,59 +34,14 @@ const init = () => {
     fs.existsSync(existManyLive) && fs.unlinkSync(existManyLive);
     fs.existsSync(freeSrvPath) && fs.unlinkSync(freeSrvPath);
     fs.existsSync(freeAddonPath) && fs.unlinkSync(freeAddonPath);
+    fs.existsSync(failToUpdatePath) && fs.unlinkSync(failToUpdatePath);
 
     fs.appendFileSync(mapListPath, 'LocationId,CategoryCode,MarketCode,SKU,newMarketCode,StorefrontId\n');
     fs.appendFileSync(updatedByGPPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
     fs.appendFileSync(freeAddonPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
     fs.appendFileSync(freeSrvPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
+    fs.appendFileSync(failToUpdatePath, 'LocationID,SubscriptionEndDate,MarketCode,SKU,Product,CategoryCode,message\n');
 };
-
-// const findStorefrontId = async(loc, cat) => {
-//     const sql = `select data->>'id' as id,
-//         data->>'statusCode' as st,
-//         data->>'isPurchased' as pur,
-//         data->>'winningStorefrontId' as winid,
-//         data->>'locationId' as loc,
-//         data->>'salesProfileStartDate' as spsd
-//     from storefronts
-//     where data->>'locationId' = '${loc}' AND data->>'categoryCode' = '${cat}';`;
-
-//     const r = await xoDs.pg.execute(DB, sql);
-//     if (r.length === 0) {
-//         fs.appendFileSync(notExistPath, `${loc},${cat}\n`);
-
-//         return null;
-//     }
-
-//     if (r.length === 1) {
-//         return r[0].id;
-//     }
-
-//     const winIds = r.filter((sf) => sf.winid === '00000000-0000-0000-0000-000000000000');
-//     if (winIds.length === 0) {
-//         fs.appendFileSync(existManyButNoWin, `${loc},${cat}\n`);
-
-//         return null;
-//     }
-
-//     if (winIds.length > 1) {
-//         const notRemovedSF = r.filter((sf) => sf.st !== 'REMOVED');
-//         if (notRemovedSF.length === 0) {
-//             fs.appendFileSync(allRemovedPath, `${loc},${cat}\n`);
-
-//             return null;
-//         }
-//         if (notRemovedSF.length > 1) {
-//             fs.appendFileSync(existManyLive, `${loc},${cat}\n`);
-
-//             return null;
-//         }
-
-//         return notRemovedSF[0].id;
-//     }
-
-//     return winIds[0].id;
-// };
 
 const getData = async(loc, cat) => {
     const sql = `select sf.data->>'id' as id,
