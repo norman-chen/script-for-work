@@ -19,12 +19,30 @@ const {
     existManyLive,
     freeSrvPath,
     freeAddonPath,
-    failToUpdatePath
+    failToUpdatePath,
+    foldPath,
+    mappedAbnormal,
+    succeedToUpdatePath
 } = require('./constants');
 
 const updateSales = require('./updateList');
 
+const initLogFold = () => {
+    if (fs.existsSync(foldPath)) {
+        const l = fs.readdirSync(foldPath)
+        l.forEach(p => {
+            fs.unlinkSync(foldPath + '/' + p);
+        })
+
+        fs.rmdirSync(foldPath);
+    }
+
+    fs.mkdirSync(foldPath);
+}
+
 const init = () => {
+    initLogFold()
+
     fs.existsSync(mapListPath) && fs.unlinkSync(mapListPath);
     fs.existsSync(notExistPath) && fs.unlinkSync(notExistPath);
     fs.existsSync(notMatchMarketPath) && fs.unlinkSync(notMatchMarketPath);
@@ -35,12 +53,15 @@ const init = () => {
     fs.existsSync(freeSrvPath) && fs.unlinkSync(freeSrvPath);
     fs.existsSync(freeAddonPath) && fs.unlinkSync(freeAddonPath);
     fs.existsSync(failToUpdatePath) && fs.unlinkSync(failToUpdatePath);
+    fs.existsSync(mappedAbnormal) && fs.unlinkSync(mappedAbnormal);
+    fs.existsSync(succeedToUpdatePath) && fs.unlinkSync(succeedToUpdatePath);
 
     fs.appendFileSync(mapListPath, 'LocationId,CategoryCode,MarketCode,SKU,newMarketCode,StorefrontId\n');
     fs.appendFileSync(updatedByGPPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
     fs.appendFileSync(freeAddonPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
     fs.appendFileSync(freeSrvPath, 'LocationId,CategoryCode,MarketCode,SKU,StorefrontId\n');
-    fs.appendFileSync(failToUpdatePath, 'LocationID,SubscriptionEndDate,MarketCode,SKU,Product,CategoryCode,message\n');
+    fs.appendFileSync(failToUpdatePath, 'LocationID,SubscriptionEndDate,MarketCode,SKU,Product,CategoryCode,id,message\n');
+    fs.appendFileSync(succeedToUpdatePath, 'LocationID,SubscriptionEndDate,MarketCode,SKU,Product,CategoryCode,id,message\n');
 };
 
 const getData = async(loc, cat) => {

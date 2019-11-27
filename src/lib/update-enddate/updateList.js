@@ -9,7 +9,9 @@ const {
     freeSrvPath,
     freeAddonPath,
     requestInfo,
-    failToUpdatePath
+    failToUpdatePath,
+    isUpdateByApi,
+    succeedToUpdatePath
 } = require('./constants');
 
 const { updateMappedSrv, updateMappedAddon } = require('./updateMapped');
@@ -27,14 +29,41 @@ const req = (sales, updateArr) => {
         }
     };
     // console.dir(options, {depth: 9})
-    return
-    return xoReq.put(`${url}/${sales.id}?apikey=${apikey}`, options)
-        .catch((error) => {
-            updateArr.forEach((item) => {
-                fs.appendFileSync(failToUpdatePath, `${item.LocationID},${item.SubscriptionEndDate},${item.MarketCode},${item.SKU},${item.Product},${item.CategoryCode},${error.message}\n`);
+    if (isUpdateByApi) {
+        return xoReq.put(`${url}/sales/${sales.id}?apikey=${apikey}`, options)
+            .then(() => {
+                updateArr.forEach((item) => {
+                    fs.appendFileSync(succeedToUpdatePath, `${item.LocationID},${item.SubscriptionEndDate},${item.MarketCode},${item.SKU},${item.Product},${item.CategoryCode},${sales.id}\n`);
+                });
+            })
+            .catch((error) => {
+                updateArr.forEach((item) => {
+                    fs.appendFileSync(failToUpdatePath, `${item.LocationID},${item.SubscriptionEndDate},${item.MarketCode},${item.SKU},${item.Product},${item.CategoryCode},${sales.id},${error.message}\n`);
+                });
             });
-        });
+    }
+
 };
+
+const shouldUpdateSrv = (srv, updateItem, storefrontId) => {
+    if (srv.purchaseStatusCode === 'FREEMIUM') {
+        fs.appendFileSync(freeSrvPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
+
+        return false;
+    }
+
+    return true
+}
+
+const shouldUpdateAddon = (aoMatch, updateItem, storefrontId) => {
+    if (aoMatch.status === 'INACTIVE') {
+        fs.appendFileSync(freeAddonPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
+
+        return false;
+    }
+
+    return true
+}
 
 module.exports = async(sales, updateArr) => {
     if (!sales) { return; }
@@ -58,17 +87,18 @@ module.exports = async(sales, updateArr) => {
                     return;
                 }
 
-                if (srv.purchaseStatusCode === 'FREEMIUM') {
-                    fs.appendFileSync(freeSrvPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
+                const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId)
 
-                    return;
+                await updateMappedSrv(sales, storefrontId, i, updateItem, !shouldUpdate);
+
+                if (shouldUpdate) {
+                    srv.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
+                    getRealItem = true;
                 }
 
-                await updateMappedSrv(sales, storefrontId, i, updateItem);
+            }
 
-                srv.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
-                getRealItem = true;
-            } else if (srv.addOns.length) {
+            if (srv.addOns.length) {
                 const aoMatchIdx = srv.addOns.findIndex((ao) => ao.sku === updateItem.SKU);
 
                 if (aoMatchIdx !== -1) {
@@ -80,28 +110,32 @@ module.exports = async(sales, updateArr) => {
                         return;
                     }
 
-                    if (aoMatch.status === 'INACTIVE') {
-                        fs.appendFileSync(freeAddonPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
+                    const shouldUpdate = shouldUpdateAddon(aoMatch, updateItem, storefrontId)
 
-                        return;
+                    await updateMappedAddon(sales, storefrontId, updateItem.MarketCode, i, aoMatchIdx, updateItem, !shouldUpdate);
+
+                    if (shouldUpdate) {
+                        aoMatch.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
+                        getRealItem = true;
                     }
-
-                    await updateMappedAddon(sales, storefrontId, updateItem.MarketCode, i, aoMatchIdx, updateItem);
-
-                    aoMatch.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
-                    getRealItem = true;
                 }
             }
 
             if (!getRealItem && updateItem.Product === 'Storefront' && !srv.sku) {
-                await updateMappedSrv(sales, storefrontId, i, updateItem);
+                if (!srv.subscriptionId) {
+                    fs.appendFileSync(updatedByGPPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
 
-                if (srv.purchaseStatusCode === 'FREEMIUM') {
-                    fs.appendFileSync(freeSrvPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
+                    return;
                 }
 
-                srv.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
-                getRealItem = true;
+                const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId);
+
+                await updateMappedSrv(sales, storefrontId, i, updateItem, !shouldUpdate);
+
+                if (shouldUpdate) {
+                    srv.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
+                    getRealItem = true;
+                }
             }
 
             break;

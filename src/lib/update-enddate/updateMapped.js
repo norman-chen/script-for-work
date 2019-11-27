@@ -5,7 +5,8 @@ const fs = require('fs');
 const {
     xoDs,
     DB,
-    mapListPath
+    mapListPath,
+    mappedAbnormal
 } = require('./constants');
 
 const getSrvSQL = (storefrontId, srvIdx) => `with tmp_services as (
@@ -75,16 +76,22 @@ const getMapAddOn = async(storefrontId, markCode, srvIdx, addonIdx, updateItem) 
     }));
 };
 
-const setMappedSrv = (sp, newEndDate, marketCode) => {
+const setMappedSrv = (sp, newEndDate, marketCode, oldIsFree, updateItem, storefrontId) => {
     const mapSrv = sp.services.find((srv) => srv.marketCode === marketCode);
     if (!mapSrv) { return; }
     if (mapSrv.purchaseStatusCode === 'FREEMIUM') { return; }
     if (!mapSrv.subscriptionId) { return; }
 
+    if (oldIsFree) {
+        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`)
+
+        return
+    }
+
     mapSrv.endDate = new Date(newEndDate).toISOString();
 };
 
-const setMappedAddon = (sp, newEndDate, marketCode, sku) => {
+const setMappedAddon = (sp, newEndDate, marketCode, sku, oldIsInactive, updateItem, storefrontId) => {
     const mapSrv = sp.services.find((srv) => srv.marketCode === marketCode);
     if (!mapSrv) { return; }
     if (mapSrv.purchaseStatusCode === 'FREEMIUM') { return; }
@@ -94,22 +101,28 @@ const setMappedAddon = (sp, newEndDate, marketCode, sku) => {
     if (mappedAddon.status === 'INACTIVE') { return; }
     if (!mappedAddon.subscriptionId) { return; }
 
+    if (oldIsInactive) {
+        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`)
+
+        return
+    }
+
     mappedAddon.endDate = new Date(newEndDate).toISOString();
 };
 
-const updateMappedSrv = async(sp, storefrontId, srvIdx, updateItem) => {
+const updateMappedSrv = async(sp, storefrontId, srvIdx, updateItem, oldIsFree) => {
     const R = await getMapSrv(storefrontId, srvIdx, updateItem);
 
     R.forEach((r) => {
-        setMappedSrv(sp, updateItem.SubscriptionEndDate, r.marketCode);
+        setMappedSrv(sp, updateItem.SubscriptionEndDate, r.marketCode, oldIsFree, updateItem, storefrontId);
     });
 };
 
-const updateMappedAddon = async(sp, storefrontId, markCode, srvIdx, addonIdx, updateItem) => {
+const updateMappedAddon = async(sp, storefrontId, markCode, srvIdx, addonIdx, updateItem, oldIsInactive) => {
     const R = await getMapAddOn(storefrontId, markCode, srvIdx, addonIdx, updateItem);
 
     R.forEach((r) => {
-        setMappedAddon(sp, updateItem.SubscriptionEndDate, r.marketCode, r.sku);
+        setMappedAddon(sp, updateItem.SubscriptionEndDate, r.marketCode, r.sku, oldIsInactive, updateItem, storefrontId);
     });
 };
 

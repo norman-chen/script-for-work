@@ -40,3 +40,9 @@ npm-debug.log
 
 
 src/methods/*
+
+src/lib/update-enddate/list2-log-1/
+src/lib/update-enddate/list2-log/
+src/lib/update-enddate/list3-log-qa/
+src/lib/update-enddate/list3-log/
+src/lib/update-enddate/list3-log-prod-1127/
