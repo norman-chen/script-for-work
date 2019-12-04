@@ -6,7 +6,8 @@ const _ = require('lodash');
 
 const {
     requestInfo,
-    isUpdateByApi
+    isUpdateByApi,
+    newEndDate
 } = require('./constants');
 
 const {
@@ -44,10 +45,21 @@ const req = (sales, updateArr) => {
 };
 
 module.exports = async(updateArr) => {
+    const locationsList = [];
+
     const locGrp = _.groupBy(updateArr, 'LocationID');
     const locs = Object.keys(locGrp);
 
     for (let i = 0; i < locs.length; i++) {
+        const location = {
+            locationId: locs[i],
+            name      : '',
+            email     : '',
+            address   : {},
+            services  : [],
+            addOns    : []
+        };
+
         const loc = locs[i];
         const updateArrEachLoc = _.orderBy(locGrp[loc], ['MarketCode', 'SKU'], ['asc', 'desc']);
 
@@ -77,7 +89,7 @@ module.exports = async(updateArr) => {
 
         updateArrEachLoc.forEach((item) => {
             if (item.SKU === 'SKU-00000092') {
-                const exist = salesMEN.services.find((srv) => srv.marketCode === item.MarketCode);
+                let exist = salesMEN.services.find((srv) => srv.marketCode === item.MarketCode);
 
                 if (!exist) {
                     const BWPSrv = salesBWP.services.find((srv) => srv.marketCode === item.MarketCode);
@@ -86,20 +98,30 @@ module.exports = async(updateArr) => {
 
                         return;
                     } else {
-                        salesMEN.services.push({
+                        exist = {
                             ...BWPSrv,
                             categoryCode      : 'MEN',
-                            endDate           : new Date(item.ExtendedSubscriptionEndDate).toISOString(),
+                            endDate           : new Date(newEndDate).toISOString(),
                             purchaseStatusCode: 'PAID',
                             statusCode        : 'LIVE',
                             addOns            : []
-                        });
+                        };
+                        salesMEN.services.push(exist);
                     }
                 } else {
-                    exist.endDate = new Date(item.ExtendedSubscriptionEndDate).toISOString();
+                    exist.endDate = new Date(newEndDate).toISOString();
                     exist.purchaseStatusCode = 'PAID';
                     exist.statusCode = 'LIVE';
                 }
+
+                location.services.push({
+                    marketCode   : exist.marketCode,
+                    categoryId   : '6dcc0428-f240-4bc5-9a16-b97a0115c3b5',
+                    tier         : 'Freemium',
+                    displayStatus: 'active',
+                    startDate    : exist.startDate,
+                    endDate      : new Date(newEndDate).toISOString()
+                });
             } else if (item.SKU === 'SKU-00000034') {
                 const existSrv = salesMEN.services.find((srv) => srv.marketCode === item.MarketCode);
 
@@ -109,24 +131,47 @@ module.exports = async(updateArr) => {
                     return;
                 }
 
-                const aoExist = existSrv.addOns.find((ao) => ao.sku === item.SKU);
+                let aoExist = existSrv.addOns.find((ao) => ao.sku === item.SKU);
                 if (!aoExist) {
                     const BWPSrv = salesBWP.services.find((srv) => srv.marketCode === item.MarketCode);
                     const BWPAddon = BWPSrv.addOns.find((ao) => ao.sku === item.SKU);
-                    existSrv.addOns.push({
+                    aoExist = {
                         ...BWPAddon,
-                        endDate: new Date(item.ExtendedSubscriptionEndDate).toISOString(),
+                        endDate: new Date(newEndDate).toISOString(),
                         status : 'ACTIVE'
-                    });
+                    };
+                    existSrv.addOns.push(aoExist);
                 } else {
-                    aoExist.endDate = new Date(item.ExtendedSubscriptionEndDate).toISOString();
+                    aoExist.endDate = new Date(newEndDate).toISOString();
                     aoExist.status = 'ACTIVE';
                 }
+
+                location.addOns.push({
+                    sku          : aoExist.sku,
+                    marketCode   : existSrv.marketCode,
+                    categoryId   : '6dcc0428-f240-4bc5-9a16-b97a0115c3b5',
+                    displayStatus: 'ACTIVE',
+                    startDate    : existSrv.startDate,
+                    endDate      : new Date(newEndDate).toISOString()
+                });
             } else {
                 console.log(`********Unexpected SKU ${item.SKU} ${item.LocationID}`);
             }
         });
 
-        await req(salesMEN, updateArrEachLoc);
+        // if(salesMEN.id === 'ef40885e-ab2a-43b2-a471-a59b00ce44aa') {
+        //     console.dir(salesMEN, {depth: 9})
+
+        //     return
+        // }
+        // await req(salesMEN, updateArrEachLoc);
+
+        locationsList.push(location);
     }
+
+    console.dir({
+        companyId  : '0e419f4a-69c4-e511-b212-005056881833',
+        companyName: 'companyName',
+        locations  : locationsList
+    }, {depth: 9});
 };

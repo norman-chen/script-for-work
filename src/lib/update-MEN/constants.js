@@ -72,5 +72,6 @@ module.exports = {
     foldPath,
     mappedAbnormal,
     isUpdateByApi,
-    succeedToUpdatePath
+    succeedToUpdatePath,
+    newEndDate: '2020-6-29 14:00:00'
 };
