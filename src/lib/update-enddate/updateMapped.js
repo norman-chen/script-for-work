@@ -83,9 +83,9 @@ const setMappedSrv = (sp, newEndDate, marketCode, oldIsFree, updateItem, storefr
     if (!mapSrv.subscriptionId) { return; }
 
     if (oldIsFree) {
-        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`)
+        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`);
 
-        return
+        return;
     }
 
     mapSrv.endDate = new Date(newEndDate).toISOString();
@@ -102,9 +102,9 @@ const setMappedAddon = (sp, newEndDate, marketCode, sku, oldIsInactive, updateIt
     if (!mappedAddon.subscriptionId) { return; }
 
     if (oldIsInactive) {
-        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`)
+        fs.appendFileSync(mappedAbnormal, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${marketCode},${storefrontId}\n`);
 
-        return
+        return;
     }
 
     mappedAddon.endDate = new Date(newEndDate).toISOString();

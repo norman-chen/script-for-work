@@ -42,7 +42,6 @@ const req = (sales, updateArr) => {
                 });
             });
     }
-
 };
 
 const shouldUpdateSrv = (srv, updateItem, storefrontId) => {
@@ -52,8 +51,8 @@ const shouldUpdateSrv = (srv, updateItem, storefrontId) => {
         return false;
     }
 
-    return true
-}
+    return true;
+};
 
 const shouldUpdateAddon = (aoMatch, updateItem, storefrontId) => {
     if (aoMatch.status === 'INACTIVE') {
@@ -62,8 +61,8 @@ const shouldUpdateAddon = (aoMatch, updateItem, storefrontId) => {
         return false;
     }
 
-    return true
-}
+    return true;
+};
 
 module.exports = async(sales, updateArr) => {
     if (!sales) { return; }
@@ -87,7 +86,7 @@ module.exports = async(sales, updateArr) => {
                     return;
                 }
 
-                const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId)
+                const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId);
 
                 await updateMappedSrv(sales, storefrontId, i, updateItem, !shouldUpdate);
 
@@ -95,7 +94,6 @@ module.exports = async(sales, updateArr) => {
                     srv.endDate = new Date(updateItem.SubscriptionEndDate).toISOString();
                     getRealItem = true;
                 }
-
             }
 
             if (srv.addOns.length) {
@@ -110,7 +108,7 @@ module.exports = async(sales, updateArr) => {
                         return;
                     }
 
-                    const shouldUpdate = shouldUpdateAddon(aoMatch, updateItem, storefrontId)
+                    const shouldUpdate = shouldUpdateAddon(aoMatch, updateItem, storefrontId);
 
                     await updateMappedAddon(sales, storefrontId, updateItem.MarketCode, i, aoMatchIdx, updateItem, !shouldUpdate);
 
@@ -146,7 +144,7 @@ module.exports = async(sales, updateArr) => {
         }
     }
 
-    return req(sales, updateArr)
+    return req(sales, updateArr);
     // console.dir(sales, {depth: 99})
     // console.log('=========================')
 };

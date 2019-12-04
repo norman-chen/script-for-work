@@ -29,19 +29,19 @@ const updateSales = require('./updateList');
 
 const initLogFold = () => {
     if (fs.existsSync(foldPath)) {
-        const l = fs.readdirSync(foldPath)
-        l.forEach(p => {
+        const l = fs.readdirSync(foldPath);
+        l.forEach((p) => {
             fs.unlinkSync(foldPath + '/' + p);
-        })
+        });
 
         fs.rmdirSync(foldPath);
     }
 
     fs.mkdirSync(foldPath);
-}
+};
 
 const init = () => {
-    initLogFold()
+    initLogFold();
 
     fs.existsSync(mapListPath) && fs.unlinkSync(mapListPath);
     fs.existsSync(notExistPath) && fs.unlinkSync(notExistPath);
