@@ -7,7 +7,9 @@ const _ = require('lodash');
 const {
     requestInfo,
     isUpdateByApi,
-    newEndDate
+    newEndDate,
+    failToUpdatePath,
+    succeedToUpdatePath
 } = require('./constants');
 
 const {
@@ -27,18 +29,17 @@ const req = (sales, updateArr) => {
             Authorization: token
         }
     };
-    // console.dir(sales, {depth: 9});
 
     if (isUpdateByApi) {
         return xoReq.put(`${url}/sales/${sales.id}?apikey=${apikey}`, options)
             .then(() => {
                 updateArr.forEach((item) => {
-                    fs.appendFileSync(`${__dirname}/succeed.log`, `${item.LocationID},${item.MarketCode},${item.SKU},${item.CategoryCode},${sales.id}\n`);
+                    fs.appendFileSync(succeedToUpdatePath, `${item.LocationID},${item.MarketCode},${item.SKU},${item.CategoryCode},${sales.id}\n`);
                 });
             })
             .catch((error) => {
                 updateArr.forEach((item) => {
-                    fs.appendFileSync(`${__dirname}/fail.log`, `${item.LocationID},${item.MarketCode},${item.SKU},${item.CategoryCode},${sales.id},${error.message}\n`);
+                    fs.appendFileSync(failToUpdatePath, `${item.LocationID},${item.MarketCode},${item.SKU},${item.CategoryCode},${sales.id},${error.message}\n`);
                 });
             });
     }
@@ -63,7 +64,9 @@ module.exports = async(updateArr) => {
         const loc = locs[i];
         const updateArrEachLoc = _.orderBy(locGrp[loc], ['MarketCode', 'SKU'], ['asc', 'desc']);
 
-        const sql = `select sf.data->>'categoryCode' as "categoryCode",
+        const sql = `
+    select
+        sf.data->>'categoryCode' as "categoryCode",
         sp.data as sales
     from storefronts sf
     inner join sales_profiles sp on sp.data->>'storefrontId' = sf.data->>'id'
@@ -75,13 +78,13 @@ module.exports = async(updateArr) => {
         if (salesRaw.length === 0 || salesRaw.length === 1) {
             console.log(`${updateArrEachLoc[0].LocationID} not exist`);
 
-            return;
+            continue;
         }
 
         if (salesRaw.length > 2) {
             console.log(`${updateArrEachLoc[0].LocationID} more than one`);
 
-            return;
+            continue;
         }
 
         const salesMEN = salesRaw.find((d) => d.categoryCode === 'MEN').sales;
@@ -159,12 +162,7 @@ module.exports = async(updateArr) => {
             }
         });
 
-        // if(salesMEN.id === 'ef40885e-ab2a-43b2-a471-a59b00ce44aa') {
-        //     console.dir(salesMEN, {depth: 9})
-
-        //     return
-        // }
-        // await req(salesMEN, updateArrEachLoc);
+        await req(salesMEN, updateArrEachLoc);
 
         locationsList.push(location);
     }
@@ -173,5 +171,5 @@ module.exports = async(updateArr) => {
         companyId  : '0e419f4a-69c4-e511-b212-005056881833',
         companyName: 'companyName',
         locations  : locationsList
-    }, {depth: 9});
+    }, { depth: 9 });
 };
