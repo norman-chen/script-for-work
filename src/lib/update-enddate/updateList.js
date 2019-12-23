@@ -83,7 +83,7 @@ module.exports = async(sales, updateArr) => {
                 if (!srv.subscriptionId) {
                     fs.appendFileSync(updatedByGPPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
 
-                    return;
+                    continue;
                 }
 
                 const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId);
@@ -105,7 +105,7 @@ module.exports = async(sales, updateArr) => {
                     if (!aoMatch.subscriptionId) {
                         fs.appendFileSync(updatedByGPPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
 
-                        return;
+                        continue;
                     }
 
                     const shouldUpdate = shouldUpdateAddon(aoMatch, updateItem, storefrontId);
@@ -123,7 +123,7 @@ module.exports = async(sales, updateArr) => {
                 if (!srv.subscriptionId) {
                     fs.appendFileSync(updatedByGPPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
 
-                    return;
+                    continue;
                 }
 
                 const shouldUpdate = shouldUpdateSrv(srv, updateItem, storefrontId);
