@@ -52,10 +52,11 @@ src/lib/update-enddate/list1220-log-prod-1127/
 src/lib/update-enddate/list1220.csv
 src/lib/update-enddate/list1221-log-qa-1123/
 src/lib/update-enddate/list1221.csv
-src/lib/correct-srv/
-src/lib/update-enddate/fix.hurry.js
 src/lib/update-enddate/list1221-log-prod-1123/
 src/lib/update-enddate/list1223-log-prod-1223/
 src/lib/update-enddate/list1224-log-prod-1223-f/
 src/lib/update-enddate/list1224-log-prod-1224-check-only/
 src/lib/update-enddate/list1224.csv
+src/lib/update-enddate/list1224-log-prod-1223-check-1/
+src/lib/update-enddate/list1224-log-prod-1224-check-only-1/
+src/lib/update-enddate/list1224-log-qa-1224-run/
