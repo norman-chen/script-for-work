@@ -165,3 +165,57 @@ const xoReq = new(require('xo-request'))();
 
 //     await xoDs.pg.execute('storefront', sqls.join(' '))
 // })()
+
+
+// ;(async () => {
+//     const payload = {
+//         "companyId":"e9ae1416-51fb-43f4-9263-cbce4ea1f260",
+//         "companyName":"Hey Pretty! Beauty",
+//         "locations":[
+//             {
+//                 "locationId":"e9ae1416-51fb-43f4-9263-cbce4ea1f260",
+//                 "name":"Hey Pretty! Beauty",
+//                 "website":"www.heyprettybeauty.com",
+//                 "email":"info@heyprettybeauty.com",
+//                 "phones":[
+//                     {
+//                         "type":"Main",
+//                         "phoneNumber":"6142561331"
+//                     }
+//                 ],
+//                 "address":{
+//                     "street1":"1221 N. 4th St.",
+//                     "street2":null,
+//                     "city":"Columbus",
+//                     "stateOrProvince":"OH",
+//                     "country":"US",
+//                     "postalCode":"43201",
+//                     "geocodeOverride":true
+//                 },
+//                 "services":[
+//                 ],
+//                 "addOns":[
+//                     {
+//                         "sku":"SKU-00000020",
+//                         "marketCode":"054",
+//                         "categoryId":"8aa9a07b-fcd8-46ed-a98f-8f3e12689dd2",
+//                         "displayStatus":"ACTIVE",
+//                         "startDate":"2019-12-23T15:17:15-0500",
+//                         "endDate":"2020-12-22T15:17:15-0500"
+//                     }
+//                 ]
+//             }
+//         ]
+//     }
+
+//     try {
+//         const r = await xoReq.post('https://prod-sales-api.localsolutions.theknot.com/v2/storefronts/fulfillments', payload, {
+//             headers: {
+//                 Authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1NzcyNDc0MzQsImV4cCI6MTU3NzUwNjYzNH0.HA5DGhjLH65K3zSPr30L8dG-XX6IHDWi5JTbLT3uYklVmIMFP0jtkD7oYWBsN-98RBQrM8VahmJGH6PHlenGZUqU-3Mrc1idSbnfpmVLp3Zn9qVwtqM1DUpNxlBcVskyN82lyLEbhKYSSYHFl06n-y5rCBHYl6F9DtROUsC2Ptg17dElQgCHPqAilizz9px4Y4eim2VK6YOo_xL6_4TUQCsWAYb77PaamsTAfpn8zrgJkAeijtvYEM30ke9lyb8dWtrE-xrMIZRd14Lq6CX26-_mAiY_JSeB6yj3p8i3lCTO_NTC6r7fxOtYEP1mFcGhXJA_lRNvHJbKmvhqJ2wRh1mD_TbyAdd5ChwHK8y--b_-q6mp8HhLZVH8F6Q_mhfMY4mQZMsRnaVO2MwWGiLxba63Qyr5fY4zzjrP9271Ve5UdEOdfF-_Mv92-8yPUuF_n6RpLOr82Jlqfkzpmu6n0jOLlFpxA1KKMCH3gDEOuLvG9CNdRKU3h3Xl4kDXx-u2AoCPzVYq23arEgIAV2OmiJi_A-sPcOZIaV6EWZinGydS4jev_wc4csApb_1goyxEb0CB3pQjXkk3iqhZONtUJmsVcFK5058r9zltezeTAC9VGBUwlVspsWxDZWBJZdFCJ_9aHJh64vZ4siXBV6VjxeORS6H46mzDTVOBN0bCUXA'
+//             }
+//         })
+//     } catch (error) {
+//         console.log('error: ', error);
+
+//     }
+// })()

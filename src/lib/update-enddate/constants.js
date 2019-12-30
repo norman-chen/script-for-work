@@ -43,22 +43,22 @@ const mappedAbnormal = `${__dirname}/${foldName}/${listName}-mapped-abnormal.csv
 let config = {};
 let requestInfo = {};
 
-// if (NODE_ENV === 'production') {
-//     config = {
-//         xoDsConfig: {
-//             'write-store': {
-//                 storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
-//             }
-//         },
-//         DB: 'storefront'
-//     };
+if (NODE_ENV === 'production') {
+    config = {
+        xoDsConfig: {
+            'write-store': {
+                storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+            }
+        },
+        DB: 'storefront'
+    };
 
-//     requestInfo = {
-//         url   : 'https://prod-sales-api.localsolutions.theknot.com',
-//         token : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUFjY291bnQgQWRtaW4gQXBwbGljYXRpb24iLCJpYXQiOjE0OTk0MTc4MDEsImV4cCI6NDY1NTA5MDkxNywiYXVkIjoiaHR0cDovL3BhcnRuZXJzYWRtaW4udGhla25vdC5jb20iLCJzdWIiOiJ2MSBzZWN1cml0eSIsImNsaWVudElkIjoiNTQ5MTUzM2ItNTI2Ny00NzhmLThlOWItNTNkNzUyYWQ5ZTRhIn0.jF218AKdaS8q3gFa_ixn5KZA0wht9xgzR-MVNdeizqY',
-//         apikey: '2c3e706eec474381a58aef482a5cff68'
-//     };
-// }
+    requestInfo = {
+        url   : 'https://prod-sales-api.localsolutions.theknot.com',
+        token : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUFjY291bnQgQWRtaW4gQXBwbGljYXRpb24iLCJpYXQiOjE0OTk0MTc4MDEsImV4cCI6NDY1NTA5MDkxNywiYXVkIjoiaHR0cDovL3BhcnRuZXJzYWRtaW4udGhla25vdC5jb20iLCJzdWIiOiJ2MSBzZWN1cml0eSIsImNsaWVudElkIjoiNTQ5MTUzM2ItNTI2Ny00NzhmLThlOWItNTNkNzUyYWQ5ZTRhIn0.jF218AKdaS8q3gFa_ixn5KZA0wht9xgzR-MVNdeizqY',
+        apikey: '2c3e706eec474381a58aef482a5cff68'
+    };
+}
 
 if (NODE_ENV === 'qa') {
     config = {

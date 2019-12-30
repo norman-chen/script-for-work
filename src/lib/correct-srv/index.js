@@ -10,7 +10,7 @@ const fs = require('fs');
 const initFold = require('../../helpers/initFold');
 
 const executeLimit = 50;
-const shouldUpdate = false;
+// const shouldUpdate = false;
 
 const marketCodeToRank = {};
 
@@ -48,6 +48,8 @@ const keepWhichSrvLive = (sales, marketCode) => {
 const updateThroughApi = async(sales) => {
     const { url, apikey, token } = requestInfo;
 
+    let all = [];
+
     for (let i = 0; i < sales.length; i++) {
         const sa = sales[i];
         const options = {
@@ -59,12 +61,20 @@ const updateThroughApi = async(sales) => {
                 Authorization: token
             }
         };
-        try {
-            await xoReq.put(`${url}/sales/${sa.id}?apikey=${apikey}`, options);
 
-            fs.appendFileSync(`${__dirname}/log/succeed.log`, `'${sa.storefrontId}'\n`);
-        } catch (error) {
-            fs.appendFileSync(`${__dirname}/log/fail.log`, `'${sa.storefrontId}'\n`);
+        all.push(
+            xoReq.put(`${url}/sales/${sa.id}?apikey=${apikey}`, options)
+                .then(() => {
+                    fs.appendFileSync(`${__dirname}/${foldName}/succeed.log`, `'${sa.storefrontId}',\n`);
+                })
+                .catch(() => {
+                    fs.appendFileSync(`${__dirname}/${foldName}/fail.log`, `'${sa.storefrontId}',\n`);
+                })
+        )
+
+        if (all.length === 30 | i === (sales.length - 1)) {
+            await Promise.all(all)
+            all = [];
         }
     }
 };
@@ -93,12 +103,12 @@ const execute = async(storefrontIds) => {
         ps.data->>'legacyMarketCode' as "legacyMarketCode",
         ps.data->>'newMarketCode' as "marketCode",
         ps.data->>'categoryCode' as "categoryCode",
-        ps.data->>'mappedLegacyMarketCode' as "mappedLegacyMarketCode"
+        ps.data->>'mappedLegacyMarketCode' as "mappedLegacyMarketCode",
+        ps.data->>'marketStatus' as "marketStatus"
     from paid_storefront_market_map ps
     inner join tmp_services ts on ps.data->>'storefrontId' = ts.sfid and (case when ps.data->>'legacyMarketCode' is not null then ps.data->>'legacyMarketCode' else ps.data->>'mappedLegacyMarketCode' end)=ts.data->>'marketCode'
     inner join sales_profiles sp on ps.data->>'storefrontId' = sp.data->>'storefrontId', jsonb_array_elements(sp.data->'services') as service
-    where ps.data->>'marketStatus' <> 'UNCHANGED'
-    and service->>'id'=ps.data->>'salesProfileId'`;
+    where service->>'id'=ps.data->>'salesProfileId'`;
 
     // console.log(getMapMarketSql)
     const [salesInDB, mappedMarkets] = await Promise.all([
@@ -108,9 +118,12 @@ const execute = async(storefrontIds) => {
 
     const salesNeedToCorrect = [];
     salesInDB.forEach((sa) => {
-        if (sa.services.filter((srv) => srv.statusCode === 'LIVE').length === 1) {
-            salesNeedToCorrect.push(sa);
+        const liveSrvs = sa.services.filter((srv) => srv.statusCode === 'LIVE');
+        if (liveSrvs.length === 1 && liveSrvs[0].purchaseStatusCode === 'FREEMIUM' && liveSrvs[0].subscriptionId) {
+            return salesNeedToCorrect.push(sa);
         }
+
+        return fs.appendFileSync(`${__dirname}/${foldName}/can-not-touch.log`, `'${sa.storefrontId}',\n`);
     });
 
     const needFixSalesFinal = [];
@@ -120,11 +133,16 @@ const execute = async(storefrontIds) => {
 
         const mappedMarketsBySf = mappedMarkets.filter((m) => m.storefrontId === sales.storefrontId);
 
-        const originalMarketCodes = [];
-        mappedMarketsBySf.forEach((m) => {
+        let originalMarketCodes = [];
+
+        mappedMarketsBySf.filter(m => m.marketStatus !== 'UNCHANGED').forEach((m) => {
             originalMarketCodes.push(m.legacyMarketCode || m.mappedLegacyMarketCode);
         });
-        // originalMarketCodes = Array.from(new Set(originalMarketCodes));
+
+        mappedMarketsBySf.filter(m => m.marketStatus === 'UNCHANGED').forEach((m) => {
+            originalMarketCodes.push(m.marketCode);
+        });
+        originalMarketCodes = Array.from(new Set(originalMarketCodes));
 
         // console.log('originalMarketCodes: ', originalMarketCodes);
         if (originalMarketCodes.length === 0) {
@@ -135,13 +153,14 @@ const execute = async(storefrontIds) => {
 
         if (originalMarketCodes.length === 1) {
             if (oldLIVEMarket === originalMarketCodes[0]) {
-                fs.appendFileSync(`${__dirname}/log/already-correct.log`, `'${sales.storefrontId}'\n`);
+                fs.appendFileSync(`${__dirname}/${foldName}/already-correct.log`, `'${sales.storefrontId}',\n`);
 
                 return;
             }
 
             keepWhichSrvLive(sales, originalMarketCodes[0]);
             needFixSalesFinal.push(sales);
+            fs.appendFileSync(`${__dirname}/${foldName}/need-to-fix.log`, `['${sales.storefrontId}', '${originalMarketCodes[0]}', '${originalMarketCodes[0]}'],\n`);
 
             return;
         }
@@ -161,13 +180,15 @@ const execute = async(storefrontIds) => {
         )[0].marketCode;
 
         if (oldLIVEMarket === marketShouldLIVE) {
-            fs.appendFileSync(`${__dirname}/log/already-correct.log`, `'${sales.storefrontId}'\n`);
+            fs.appendFileSync(`${__dirname}/${foldName}/already-correct.log`, `'${sales.storefrontId}',\n`);
 
             return;
         }
 
         keepWhichSrvLive(sales, marketShouldLIVE);
         needFixSalesFinal.push(sales);
+        fs.appendFileSync(`${__dirname}/${foldName}/need-to-fix.log`, `['${sales.storefrontId}', '${marketShouldLIVE}', '${originMarkets.map(m => m.marketCode).join(',')}'],\n`);
+
     });
 
     shouldUpdate && await updateThroughApi(needFixSalesFinal);
@@ -175,16 +196,42 @@ const execute = async(storefrontIds) => {
     // console.log(needFixSalesFinal.length);
 }
 
+// ;(async() => {
+//     initFold(`${__dirname}/${foldName}`);
+//     await getMarketCodeToRank();
+
+//     const storefrontIds = await getCronjobLog();
+//     const total = storefrontIds.length;
+//     console.log('total: ', total);
+//     let executedSfs = [];
+
+//     for (let i = 0; i < total; i++) {
+//         executedSfs.push(storefrontIds[i].storefrontId);
+//         if (executedSfs.length === executeLimit || i === (total - 1)) {
+//             await execute(executedSfs);
+//             executedSfs = [];
+//             // break;
+//         }
+//     }
+// })();
+
 ;(async() => {
-    initFold(`${__dirname}/log`);
+    initFold(`${__dirname}/${foldName}`);
     await getMarketCodeToRank();
 
-    const storefrontIds = await getCronjobLog();
+    const storefrontIds = [
+        '0d37948f-0766-4f2c-af22-a266009b9ae7',
+        '50fffa24-88fd-414f-9881-58ce973a6f8c',
+        '7df43207-bbe6-4993-914f-1ef295fc7c26',
+        '9773380b-8e5c-df11-849b-0014c258f21e',
+        'b6c3278b-1293-49cd-b54f-a67200ef2d4a',
+    ];
     const total = storefrontIds.length;
+    console.log('total: ', total);
     let executedSfs = [];
 
     for (let i = 0; i < total; i++) {
-        executedSfs.push(storefrontIds[i].storefrontId);
+        executedSfs.push(storefrontIds[i]);
         if (executedSfs.length === executeLimit || i === (total - 1)) {
             await execute(executedSfs);
             executedSfs = [];

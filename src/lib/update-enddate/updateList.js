@@ -119,7 +119,7 @@ module.exports = async(sales, updateArr) => {
                 }
             }
 
-            if (!getRealItem && updateItem.Product === 'Storefront' && !srv.sku) {
+            if (!getRealItem && updateItem.Product.includes('Storefront') || !srv.sku) {
                 if (!srv.subscriptionId) {
                     fs.appendFileSync(updatedByGPPath, `${updateItem.LocationID},${updateItem.CategoryCode},${updateItem.MarketCode},${updateItem.SKU},${storefrontId}\n`);
 

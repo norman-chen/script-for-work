@@ -60,3 +60,7 @@ src/lib/update-enddate/list1224.csv
 src/lib/update-enddate/list1224-log-prod-1223-check-1/
 src/lib/update-enddate/list1224-log-prod-1224-check-only-1/
 src/lib/update-enddate/list1224-log-qa-1224-run/
+src/lib/correct-srv/log-qa-1226-2/
+src/lib/correct-srv/log-qa-1226-3/
+src/lib/update-enddate/list1224-log-prod-1224-check-only-2/
+src/lib/update-enddate/list1224-log-prod-1224-run/
