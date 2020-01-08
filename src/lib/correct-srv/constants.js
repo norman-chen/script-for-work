@@ -19,11 +19,13 @@ process.argv.forEach((item, index) => {
 console.log('=============');
 
 shouldUpdate = shouldUpdate === 'true';
+console.log('shouldUpdate: ', shouldUpdate);
 
 let config = {};
 let requestInfo = {};
 
 if (NODE_ENV === 'production') {
+    console.log('---using production config');
     config = {
         xoDsConfig: {
             'write-store': {
@@ -38,9 +40,8 @@ if (NODE_ENV === 'production') {
         token : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUFjY291bnQgQWRtaW4gQXBwbGljYXRpb24iLCJpYXQiOjE0OTk0MTc4MDEsImV4cCI6NDY1NTA5MDkxNywiYXVkIjoiaHR0cDovL3BhcnRuZXJzYWRtaW4udGhla25vdC5jb20iLCJzdWIiOiJ2MSBzZWN1cml0eSIsImNsaWVudElkIjoiNTQ5MTUzM2ItNTI2Ny00NzhmLThlOWItNTNkNzUyYWQ5ZTRhIn0.jF218AKdaS8q3gFa_ixn5KZA0wht9xgzR-MVNdeizqY',
         apikey: '2c3e706eec474381a58aef482a5cff68'
     };
-}
-
-if (NODE_ENV === 'qa') {
+} else if (NODE_ENV === 'qa') {
+    console.log('---using qa config');
     config = {
         xoDsConfig: {
             'write-store': {
@@ -55,6 +56,8 @@ if (NODE_ENV === 'qa') {
         token : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUFjY291bnQgQWRtaW4gQXBwbGljYXRpb24iLCJpYXQiOjE0OTk0MTc4MDEsImV4cCI6NDY1NTA5MDkxNywiYXVkIjoicWEucGFydG5lcnNhZG1pbi50aGVrbm90LmNvbSIsInN1YiI6InYxIHNlY3VyaXR5IiwiY2xpZW50SWQiOiI5ZDlkM2ZjMy03OWUxLTRiYTUtYjE2Ny01ZjA1ODE5NmYxZjUifQ.BK5-8gkpUK9zOosfLRFzNj54r9LdvbbvoUypd3yc44M',
         apikey: '2f40b70d252548e79f5b62cda387c8e0'
     };
+} else {
+    console.log('-----using none config')
 }
 
 xoDs.config(config.xoDsConfig);

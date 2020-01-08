@@ -64,3 +64,5 @@ src/lib/correct-srv/log-qa-1226-2/
 src/lib/correct-srv/log-qa-1226-3/
 src/lib/update-enddate/list1224-log-prod-1224-check-only-2/
 src/lib/update-enddate/list1224-log-prod-1224-run/
+src/lib/update-MEN/list-*
+src/lib/correct-srv/log-*

@@ -1,3 +1,12 @@
+//
+//
+//
+// node src/lib/correct-srv --NODE_ENV=qa --foldName=log-qa-1226-3-2 --shouldUpdate=true
+// node src/lib/correct-srv --NODE_ENV=production --foldName=log-prod-0108-check --shouldUpdate=false
+//
+//
+//
+
 const {
     xoDs,
     requestInfo
@@ -10,7 +19,6 @@ const fs = require('fs');
 const initFold = require('../../helpers/initFold');
 
 const executeLimit = 50;
-// const shouldUpdate = false;
 
 const marketCodeToRank = {};
 
@@ -70,10 +78,10 @@ const updateThroughApi = async(sales) => {
                 .catch(() => {
                     fs.appendFileSync(`${__dirname}/${foldName}/fail.log`, `'${sa.storefrontId}',\n`);
                 })
-        )
+        );
 
         if (all.length === 30 | i === (sales.length - 1)) {
-            await Promise.all(all)
+            await Promise.all(all);
             all = [];
         }
     }
@@ -135,11 +143,11 @@ const execute = async(storefrontIds) => {
 
         let originalMarketCodes = [];
 
-        mappedMarketsBySf.filter(m => m.marketStatus !== 'UNCHANGED').forEach((m) => {
+        mappedMarketsBySf.filter((m) => m.marketStatus !== 'UNCHANGED').forEach((m) => {
             originalMarketCodes.push(m.legacyMarketCode || m.mappedLegacyMarketCode);
         });
 
-        mappedMarketsBySf.filter(m => m.marketStatus === 'UNCHANGED').forEach((m) => {
+        mappedMarketsBySf.filter((m) => m.marketStatus === 'UNCHANGED').forEach((m) => {
             originalMarketCodes.push(m.marketCode);
         });
         originalMarketCodes = Array.from(new Set(originalMarketCodes));
@@ -187,8 +195,7 @@ const execute = async(storefrontIds) => {
 
         keepWhichSrvLive(sales, marketShouldLIVE);
         needFixSalesFinal.push(sales);
-        fs.appendFileSync(`${__dirname}/${foldName}/need-to-fix.log`, `['${sales.storefrontId}', '${marketShouldLIVE}', '${originMarkets.map(m => m.marketCode).join(',')}'],\n`);
-
+        fs.appendFileSync(`${__dirname}/${foldName}/need-to-fix.log`, `['${sales.storefrontId}', '${marketShouldLIVE}', '${originMarkets.map((m) => m.marketCode).join(',')}'],\n`);
     });
 
     shouldUpdate && await updateThroughApi(needFixSalesFinal);
@@ -196,42 +203,17 @@ const execute = async(storefrontIds) => {
     // console.log(needFixSalesFinal.length);
 }
 
-// ;(async() => {
-//     initFold(`${__dirname}/${foldName}`);
-//     await getMarketCodeToRank();
-
-//     const storefrontIds = await getCronjobLog();
-//     const total = storefrontIds.length;
-//     console.log('total: ', total);
-//     let executedSfs = [];
-
-//     for (let i = 0; i < total; i++) {
-//         executedSfs.push(storefrontIds[i].storefrontId);
-//         if (executedSfs.length === executeLimit || i === (total - 1)) {
-//             await execute(executedSfs);
-//             executedSfs = [];
-//             // break;
-//         }
-//     }
-// })();
-
 ;(async() => {
     initFold(`${__dirname}/${foldName}`);
     await getMarketCodeToRank();
 
-    const storefrontIds = [
-        '0d37948f-0766-4f2c-af22-a266009b9ae7',
-        '50fffa24-88fd-414f-9881-58ce973a6f8c',
-        '7df43207-bbe6-4993-914f-1ef295fc7c26',
-        '9773380b-8e5c-df11-849b-0014c258f21e',
-        'b6c3278b-1293-49cd-b54f-a67200ef2d4a',
-    ];
+    const storefrontIds = await getCronjobLog();
     const total = storefrontIds.length;
     console.log('total: ', total);
     let executedSfs = [];
 
     for (let i = 0; i < total; i++) {
-        executedSfs.push(storefrontIds[i]);
+        executedSfs.push(storefrontIds[i].storefrontId);
         if (executedSfs.length === executeLimit || i === (total - 1)) {
             await execute(executedSfs);
             executedSfs = [];
@@ -239,3 +221,28 @@ const execute = async(storefrontIds) => {
         }
     }
 })();
+
+// ;(async() => {
+//     initFold(`${__dirname}/${foldName}`);
+//     await getMarketCodeToRank();
+
+//     const storefrontIds = [
+//         '0d37948f-0766-4f2c-af22-a266009b9ae7',
+//         '50fffa24-88fd-414f-9881-58ce973a6f8c',
+//         '7df43207-bbe6-4993-914f-1ef295fc7c26',
+//         '9773380b-8e5c-df11-849b-0014c258f21e',
+//         'b6c3278b-1293-49cd-b54f-a67200ef2d4a',
+//     ];
+//     const total = storefrontIds.length;
+//     console.log('total: ', total);
+//     let executedSfs = [];
+
+//     for (let i = 0; i < total; i++) {
+//         executedSfs.push(storefrontIds[i]);
+//         if (executedSfs.length === executeLimit || i === (total - 1)) {
+//             await execute(executedSfs);
+//             executedSfs = [];
+//             // break;
+//         }
+//     }
+// })();

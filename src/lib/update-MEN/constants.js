@@ -8,12 +8,13 @@
 const listName = 'list'; // NEED CHANGED
 const listPath = `${__dirname}/${listName}.csv`;
 
-const foldName = `${listName}-log-prod-1206`; // NEED CHANGED
+const foldName = `${listName}-log-prod-0108-1`; // NEED CHANGED
 
 const foldPath = `${__dirname}/${foldName}`;
 const mapListPath = `${__dirname}/${foldName}/${listName}-map.csv`;
 const failToUpdatePath = `${__dirname}/${foldName}/${listName}-fail.csv`;
 const succeedToUpdatePath = `${__dirname}/${foldName}/${listName}-succeed.csv`;
+const willBringBackPath = `${__dirname}/${foldName}/${listName}-will-bring-back.csv`;
 
 const initFiles = require('../../helpers/initFiles');
 const initFold = require('../../helpers/initFold');
@@ -61,7 +62,7 @@ const DB = 'storefront';
 /// API request
 /// API request
 /// API request
-const isUpdateByApi = false; // NEED CHANGED
+const isUpdateByApi = true; // NEED CHANGED
 // NEED CHANGED
 // const requestInfo = {
 //     url   : 'https://qa-sales-api.localsolutions.theknot.com',
@@ -88,5 +89,6 @@ module.exports = {
     requestInfo,
     isUpdateByApi,
     newEndDate: '2020-6-29 14:00:00', // NEED CHANGED
-    init
+    init,
+    willBringBackPath
 };

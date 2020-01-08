@@ -2,23 +2,26 @@ const csv = require('csvtojson');
 const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 const fs = require('fs');
-const Promise = require('bluebird')
-const _ = require('lodash')
+const Promise = require('bluebird');
+const _ = require('lodash');
 
 const xoReq = new(require('xo-request'))();
 
 // ;(async () => {
-//     const needToFix = require('./log-qa-1226-3/need-to-fix');
+//     const needToFix = require('./log-prod-0108-check/need-to-fix');
 
 //     const sqls = [];
 
 //     needToFix.forEach(item => {
-//         sqls.push(`INSERT INTO need_to_fix_1226 (id, market, ori) values ('${item[0]}', '${item[1]}', '${item[2]}');`)
+//         sqls.push(`INSERT INTO need_to_correct_live_srv_0108 (id, market, ori) values ('${item[0]}', '${item[1]}', '${item[2]}');`)
 //     });
 
 //     xoDs.config({
+//         // 'write-store': {
+//         //     storefront: 'postgres://localservices:!q2w3e4r5t6y7@storefronts-pg-qa.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+//         // },
 //         'write-store': {
-//             storefront: 'postgres://localservices:!q2w3e4r5t6y7@storefronts-pg-qa.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+//             storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
 //         }
 //     });
 

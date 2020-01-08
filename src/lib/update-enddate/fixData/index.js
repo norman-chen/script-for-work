@@ -9,12 +9,10 @@ let prodIds = require('./prod');
     prodIds = Array.from(new Set(prodIds));
 
     // const newIds = [];
-    bakIds.forEach(bId => {
+    bakIds.forEach((bId) => {
         if (!prodIds.includes(bId)) {
-            fs.appendFileSync(`${__dirname}/new-ids.log`, `'${bId}',\n`)
+            fs.appendFileSync(`${__dirname}/new-ids.log`, `'${bId}',\n`);
             // newIds.push(bId)
         }
-    })
-
-
-})()
+    });
+})();

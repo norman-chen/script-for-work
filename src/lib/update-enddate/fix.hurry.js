@@ -5,8 +5,8 @@ const csv = require('csvtojson');
 const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 const fs = require('fs');
-const Promise = require('bluebird')
-const _ = require('lodash')
+const Promise = require('bluebird');
+const _ = require('lodash');
 
 const xoReq = new(require('xo-request'))();
 
