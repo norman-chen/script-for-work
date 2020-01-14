@@ -8,12 +8,12 @@ const _ = require('lodash');
 const xoReq = new(require('xo-request'))();
 
 // ;(async () => {
-//     const needToFix = require('./log-prod-0108-check/need-to-fix');
+//     const needToFix = require('./log-prod-0109/need-to-fix');
 
 //     const sqls = [];
 
 //     needToFix.forEach(item => {
-//         sqls.push(`INSERT INTO need_to_correct_live_srv_0108 (id, market, ori) values ('${item[0]}', '${item[1]}', '${item[2]}');`)
+//         sqls.push(`INSERT INTO need_to_correct_live_srv_0109 (id, market, ori) values ('${item[0]}', '${item[1]}', '${item[2]}');`)
 //     });
 
 //     xoDs.config({
@@ -160,3 +160,218 @@ const xoReq = new(require('xo-request'))();
 //         }
 //     }
 // })()
+
+
+;(async() => {
+    const sales = {
+        id    : '202b95d0-c312-49f5-8cd4-b73d902a6a21',
+        actors: {
+            createdBy      : '00000000-0000-0000-0000-000000000000',
+            updatedBy      : 'b258fe63-69ef-4600-a604-52904668c2d0',
+            sourceCreatedBy: '6e6a18da-29b6-4def-9785-0e66d171c788',
+            sourceUpdatedBy: '6e6a18da-29b6-4def-9785-0e66d171c788'
+        },
+        adTier: 'GOLD',
+        source: {
+            application: 'MyAccount Application'
+        },
+        services: [
+            {
+                id                : '87c620b2-7f8d-4a87-95c8-9646c3cbc5d4',
+                sku               : '',
+                adTier            : 'LIMITED',
+                addOns            : [],
+                endDate           : '',
+                isPrimary         : false,
+                startDate         : '',
+                marketCode        : '065',
+                ratePlanId        : '',
+                statusCode        : 'REMOVED',
+                vendorTier        : 'UNPAID',
+                categoryCode      : 'WPH',
+                salesRecordId     : '',
+                subscriptionId    : '',
+                purchaseStatusCode: 'FREEMIUM'
+            },
+            {
+                id                : '1a1a7096-2b6b-4f02-ab81-687c9ecebd3e',
+                sku               : 'SKU-00000092',
+                adTier            : 'LIMITED',
+                addOns            : [],
+                endDate           : '2020-01-07T20:54:45.419Z',
+                isPrimary         : false,
+                startDate         : '2018-12-14T06:00:00.000Z',
+                marketCode        : '107',
+                ratePlanId        : '',
+                statusCode        : 'REMOVED',
+                vendorTier        : 'UNPAID',
+                categoryCode      : 'WPH',
+                salesRecordId     : 'C-01526513',
+                subscriptionId    : 'A-S00206669',
+                purchaseStatusCode: 'FREEMIUM'
+            },
+            {
+                id                : '661ec8f6-bc2a-4cb9-b6c7-518a6cb00538',
+                sku               : 'SKU-00000092',
+                adTier            : 'GOLD',
+                addOns            : [],
+                endDate           : '2020-12-14T00:00:00.000Z',
+                isPrimary         : true,
+                startDate         : '2018-12-14T06:00:00.000Z',
+                marketCode        : '335',
+                ratePlanId        : '',
+                statusCode        : 'LIVE',
+                vendorTier        : 'STANDARD',
+                categoryCode      : 'WPH',
+                salesRecordId     : 'C-01526513',
+                subscriptionId    : 'A-S00206669',
+                purchaseStatusCode: 'PAID'
+            },
+            {
+                id                : '3893bd9e-c774-4cb6-ad3e-e84a875cfd7c',
+                sku               : 'SKU-00000092',
+                adTier            : 'GOLD',
+                addOns            : [],
+                endDate           : '2020-12-14T00:00:00.000Z',
+                isPrimary         : false,
+                startDate         : '2018-12-14T06:00:00.000Z',
+                marketCode        : '337',
+                ratePlanId        : '',
+                statusCode        : 'LIVE',
+                vendorTier        : 'STANDARD',
+                categoryCode      : 'WPH',
+                salesRecordId     : 'C-01526513',
+                subscriptionId    : 'A-S00206669',
+                purchaseStatusCode: 'PAID'
+            },
+            {
+                id                : '01910bb7-3017-47a3-be58-864f96c5b506',
+                sku               : 'SKU-00000092',
+                adTier            : 'GOLD',
+                addOns            : [],
+                endDate           : '2020-12-14T00:00:00.000Z',
+                isPrimary         : false,
+                startDate         : '2018-12-14T06:00:00.000Z',
+                marketCode        : '336',
+                ratePlanId        : '',
+                statusCode        : 'LIVE',
+                vendorTier        : 'STANDARD',
+                categoryCode      : 'WPH',
+                salesRecordId     : 'C-01526513',
+                subscriptionId    : 'A-S00206669',
+                purchaseStatusCode: 'PAID'
+            }
+        ],
+        vendorId : 'bc36b7b0-e60b-49c1-a351-a68e00c993fb',
+        accountId: 'b3a8cdc5-7dda-4a2a-ba1b-a68e00c993ed',
+        timestamp: {
+            createdAt      : '2018-04-02T22:37:22.9941272-05:00',
+            updatedAt      : '2020-01-07T20:54:45.498Z',
+            sourceCreatedAt: '2015-07-09T20:27:47',
+            sourceUpdatedAt: '2016-09-27T17:13:56'
+        },
+        locationId  : 'ce42193b-362c-4266-9dbe-73dfbbbdebab',
+        vendorTier  : 'STANDARD',
+        storefrontId: '202b95d0-c312-49f5-8cd4-b73d902a6a21'
+    };
+
+    const stf = {
+        id : '202b95d0-c312-49f5-8cd4-b73d902a6a21',
+        bio: {
+            role       : 'Owner',
+            contactName: 'Margeaux',
+            description: ''
+        },
+        name : 'Margeaux Boles Photography',
+        email: 'margeauxphoto@gmail.com',
+        phone: {
+            number   : '3059231136',
+            extension: ''
+        },
+        actors: {
+            createdBy      : '00000000-0000-0000-0000-000000000000',
+            updatedBy      : '777f9d96-34b6-4c55-a0d2-f2e7a7a5e262',
+            sourceCreatedBy: 'c5ef2654-86d4-4a75-bd3b-fe01fb91b300',
+            sourceUpdatedBy: '27f8e6b9-1769-4c21-adbc-a68e00c99527'
+        },
+        source: {
+            originalId         : '00000000-0000-0000-0000-000000000000',
+            application        : 'MyAccount Application',
+            originalCode       : 'XO-Internal',
+            originalApplication: '00000000-0000-0000-0000-000000000000'
+        },
+        address: {
+            city           : 'Maggie Valley',
+            country        : 'US',
+            street1        : '30 Elm Dr',
+            street2        : '',
+            latitude       : 35.523564,
+            longitude      : -83.108976,
+            stateCode      : 'NC',
+            postalCode     : '28751',
+            servingArea    : 'Key Largo, Key West, Asheville, North Carolina',
+            displayAddress : false,
+            geoCodeOverride: false
+        },
+        extinct  : false,
+        accountId: 'b3a8cdc5-7dda-4a2a-ba1b-a68e00c993ed',
+        displayId: 379301,
+        timestamp: {
+            createdAt      : '2018-04-02T22:47:16.829Z',
+            updatedAt      : '2020-01-09T03:09:02.676Z',
+            sourceCreatedAt: '2011-03-28T19:02:07.000Z',
+            sourceUpdatedAt: '2018-02-20T23:41:31.000Z'
+        },
+        isTestData               : false,
+        locationId               : 'ce42193b-362c-4266-9dbe-73dfbbbdebab',
+        statusCode               : 'LIVE',
+        claimedDate              : '2018-04-02T22:47:16.829Z',
+        isPurchased              : false,
+        categoryCode             : 'WPH',
+        isTransaction            : false,
+        displayWebsite           : 'margeauxphoto.com',
+        disableTracking          : false,
+        qualityTierCode          : 'NONE',
+        claimedStatusCode        : 'CLAIMED',
+        editorialContent1        : '',
+        editorialContent2        : '',
+        editorialContent3        : '',
+        winningStorefrontId      : '00000000-0000-0000-0000-000000000000',
+        salesProfileStartDate    : '2018-12-14T06:00:00.000Z',
+        profileExternalReferences: [
+            {
+                code : 'TwoBrightLights',
+                value: '51fe5a14-c6b2-11e4-be0a-22000aa61a3e'
+            },
+            {
+                code : 'TwoBrightLights',
+                value: '58be628c-124d-11e4-843f-22000aa61a3e'
+            }
+        ]
+    };
+
+    const sql = `INSERT INTO sales_profiles (data) values ('${JSON.stringify(sales)}');`;
+    const sql1 = `INSERT INTO storefronts (data) values ('${JSON.stringify(stf)}');`;
+
+    xoDs.config({
+        'write-store': {
+            storefront: 'postgres://localservices:!q2w3e4r5t6y7@storefronts-pg-qa.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+        }
+    });
+
+    // try {
+    //     await xoDs.pg.execute('storefront', sql);
+    // } catch (error) {
+    //     console.log('======')
+    //     console.log('error: ', error);
+
+    // }
+
+    try {
+        console.log(sql1);
+        await xoDs.pg.execute('storefront', sql1);
+    } catch (error) {
+        console.log('======111');
+        console.log('error: ', error);
+    }
+})();

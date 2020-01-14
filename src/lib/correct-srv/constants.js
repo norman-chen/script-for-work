@@ -57,7 +57,7 @@ if (NODE_ENV === 'production') {
         apikey: '2f40b70d252548e79f5b62cda387c8e0'
     };
 } else {
-    console.log('-----using none config')
+    console.log('-----using none config');
 }
 
 xoDs.config(config.xoDsConfig);

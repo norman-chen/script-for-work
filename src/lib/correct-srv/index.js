@@ -118,7 +118,6 @@ const execute = async(storefrontIds) => {
     inner join sales_profiles sp on ps.data->>'storefrontId' = sp.data->>'storefrontId', jsonb_array_elements(sp.data->'services') as service
     where service->>'id'=ps.data->>'salesProfileId'`;
 
-    // console.log(getMapMarketSql)
     const [salesInDB, mappedMarkets] = await Promise.all([
         xoDs.pg.execute('storefront', getSalesSql),
         xoDs.pg.execute('storefront', getMapMarketSql)
@@ -227,11 +226,7 @@ const execute = async(storefrontIds) => {
 //     await getMarketCodeToRank();
 
 //     const storefrontIds = [
-//         '0d37948f-0766-4f2c-af22-a266009b9ae7',
-//         '50fffa24-88fd-414f-9881-58ce973a6f8c',
-//         '7df43207-bbe6-4993-914f-1ef295fc7c26',
-//         '9773380b-8e5c-df11-849b-0014c258f21e',
-//         'b6c3278b-1293-49cd-b54f-a67200ef2d4a',
+//         'd10406d2-040c-41f0-be1e-a35001100e4b'
 //     ];
 //     const total = storefrontIds.length;
 //     console.log('total: ', total);

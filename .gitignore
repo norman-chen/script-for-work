@@ -66,3 +66,5 @@ src/lib/update-enddate/list1224-log-prod-1224-check-only-2/
 src/lib/update-enddate/list1224-log-prod-1224-run/
 src/lib/update-MEN/list-*
 src/lib/correct-srv/log-*
+src/lib/add-360/qa-*
+src/lib/add-360/list2*
