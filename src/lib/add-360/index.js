@@ -10,17 +10,17 @@ const uploadToLibraryMethod = require('./step1-upload-to-library');
 const uploadToGalleryMethod = require('./step2-upload-to-gallery');
 
 const DB_CONFIG = {
-    xoDsConfig: {
-        'write-store': {
-            storefront: 'postgres://localservices:!q2w3e4r5t6y7@storefronts-pg-qa.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
-        }
-    }
-
     // xoDsConfig: {
-    //         'write-store': {
-    //             storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
-    //         }
-    //     },
+    //     'write-store': {
+    //         storefront: 'postgres://localservices:!q2w3e4r5t6y7@storefronts-pg-qa.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+    //     }
+    // }
+
+    xoDsConfig: {
+            'write-store': {
+                storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
+            }
+        },
 };
 
 xoDs.config(DB_CONFIG.xoDsConfig);
@@ -97,9 +97,8 @@ const succeedStorefrontIdLogPath = `${prefix}-succeed-sf-id`;
 
     // sort by accountId
     uploadToLibrary = uploadToLibrary.sort((x, y) => x.accountId > y.accountId ? 1 : -1);
-
     // upload to library
-    await uploadToLibraryMethod(uploadToLibrary, Config, uploadToLibraryLogPath);
+    // await uploadToLibraryMethod(uploadToLibrary, Config, uploadToLibraryLogPath);
 
     console.log('Done to write a final list..');
 
@@ -122,6 +121,8 @@ const succeedStorefrontIdLogPath = `${prefix}-succeed-sf-id`;
     from storefronts
     where ${whereSQLS.join(' OR ')}`;
 
+    console.log(sql)
+    return
     const uploadToGalleryList = (await xoDs.pg.execute('storefront', sql))
         .map((dd) => {
             const acc = uploadToLibrary.find((item) => item.accountId === dd.accountId);
@@ -136,12 +137,14 @@ const succeedStorefrontIdLogPath = `${prefix}-succeed-sf-id`;
         });
 
     const len1 = uploadToGalleryList.length;
+    console.log('len1: ', len1);
+    return
     for (let i = 0; i < len1; i++) {
         fs.appendFileSync(`${__dirname}/${uploadToGalleryLogPath}.json`, `${JSON.stringify(uploadToGalleryList[i])},\n`);
     }
     console.log('Done to write a gallery list..');
 
-    await uploadToGalleryMethod(uploadToGalleryList, Config, succeedStorefrontIdLogPath);
+    // await uploadToGalleryMethod(uploadToGalleryList, Config, succeedStorefrontIdLogPath);
 
     // console.log(uploadToGalleryList[0])
     // {
