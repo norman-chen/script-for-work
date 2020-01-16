@@ -20,7 +20,7 @@ const DB_CONFIG = {
         'write-store': {
             storefront: 'postgres://localservices:XvkTraVU94enXcud@storefronts-pg-prod.cfjnafc8bsrz.us-east-1.rds.amazonaws.com/storefront'
         }
-    },
+    }
 };
 
 xoDs.config(DB_CONFIG.xoDsConfig);
@@ -40,9 +40,9 @@ const Config = {
     // }
 
     mediaApi: 'https://prod-media-api.localsolutions.theknot.com',
-    reqOps: {
+    reqOps  : {
         headers: {
-            authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1NzkxNDMyODUsImV4cCI6MTU3OTIyOTY4NSwidXNlcklkIjoiMTY4ZGIwNjMtZDY4Mi00ODlkLTg0NTctZTAxNjZmYmU5ODk1Iiwic2Vzc2lvbklkIjoiNGM4ZGE3YzQtMjg1YS00OGQzLWJmMjEtZTc1ZWZmNzVjZmRhIiwiYXBwbGljYXRpb25zIjpbInNlcnZpY2UtY29udmVyc2F0aW9uLWFwaSJdLCJ0b2tlbklkIjoiYjhlZWE0ZDItOTM4Ni00ZjA1LTkxOTQtNGNmYWViYWZjM2YxIiwicmVxdWVzdFVzZXJJZCI6IjE2OGRiMDYzLWQ2ODItNDg5ZC04NDU3LWUwMTY2ZmJlOTg5NSIsImlkIjpbXSwiYWNjb3VudElkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiaXNzIjoiVGhlIEtub3QgUHJvIFByb2R1Y3Rpb24iLCJhdWQiOiJ3d3cudGhla25vdHByby5jb20iLCJzdWIiOiJ2MSBzZWN1cml0eSIsInNjb3BlIjpbIlN1cGVyQWRtaW4iXX0.wmYpEqbq5Y4d-RI2dAaS3U0WOoX2QYY4MpZ-qHX3K_I` // NEED CHANGED
+            authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1NzkxNDMyODUsImV4cCI6MTU3OTIyOTY4NSwidXNlcklkIjoiMTY4ZGIwNjMtZDY4Mi00ODlkLTg0NTctZTAxNjZmYmU5ODk1Iiwic2Vzc2lvbklkIjoiNGM4ZGE3YzQtMjg1YS00OGQzLWJmMjEtZTc1ZWZmNzVjZmRhIiwiYXBwbGljYXRpb25zIjpbInNlcnZpY2UtY29udmVyc2F0aW9uLWFwaSJdLCJ0b2tlbklkIjoiYjhlZWE0ZDItOTM4Ni00ZjA1LTkxOTQtNGNmYWViYWZjM2YxIiwicmVxdWVzdFVzZXJJZCI6IjE2OGRiMDYzLWQ2ODItNDg5ZC04NDU3LWUwMTY2ZmJlOTg5NSIsImlkIjpbXSwiYWNjb3VudElkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiaXNzIjoiVGhlIEtub3QgUHJvIFByb2R1Y3Rpb24iLCJhdWQiOiJ3d3cudGhla25vdHByby5jb20iLCJzdWIiOiJ2MSBzZWN1cml0eSIsInNjb3BlIjpbIlN1cGVyQWRtaW4iXX0.wmYpEqbq5Y4d-RI2dAaS3U0WOoX2QYY4MpZ-qHX3K_I' // NEED CHANGED
         }
     }
 };
