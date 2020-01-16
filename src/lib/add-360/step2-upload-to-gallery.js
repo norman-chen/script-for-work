@@ -33,10 +33,12 @@ module.exports = async(targetList, Config, succeedStorefrontIdLogPath) => {
         const storefrontId = ele.storefrontId;
         const url = `${Config.mediaApi}/storefronts/${storefrontId}/gallery`;
 
-        if (reqBodies.length === 0 || reqBodies.find((item) => item.reqBody.payload.ids[0] !== ele.mediaId)) {
+        if (reqBodies.length === 0) {
             reqBodies.push({ reqBody, url, storefrontId });
-        } else {
+        } else if (reqBodies.find((item) => item.reqBody.payload.ids[0] === ele.mediaId)) {
             laterReq.push({ reqBody, url, storefrontId });
+        } else {
+            reqBodies.push({ reqBody, url, storefrontId });
         }
 
         if (reqBodies.length === 30 || (i + 1) === len) {

@@ -15,20 +15,18 @@ const storefrontIds = [
 ]
 
 ;(async () => {
-    for (let i = 0; i < storefrontIds.length; i++) {
-        const sfId = storefrontIds[i];
 
         await rp({
             method : 'POST',
-            uri    : `${constants.sfUri}/storefronts/${sfId}/publish?apikey=${constants.apikey}`,
+            uri    : `https://qa-storefront-api.localsolutions.theknot.com/storefronts/bulk-publish?apikey=${constants.apikey}`,
             headers: {
                 authorization: `Bearer ${constants.token}`
             },
             body: {
+                storefrontIds,
                 sections: ['gallery', 'detail', 'sales']
             },
             json: true
         });
-    }
 
 })()

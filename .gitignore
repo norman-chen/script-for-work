@@ -67,4 +67,5 @@ src/lib/update-enddate/list1224-log-prod-1224-run/
 src/lib/update-MEN/list-*
 src/lib/correct-srv/log-*
 src/lib/add-360/qa-*
+src/lib/add-360/prod-*
 src/lib/add-360/list2*
