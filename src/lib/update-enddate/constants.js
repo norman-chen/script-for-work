@@ -3,10 +3,10 @@
 const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
-global.NODE_ENV = 'qa'; // production
+global.NODE_ENV = 'production'; // production
 global.shouldUpdate = false;
-global.fileName = '';
-global.foldNameTail = '';
+global.fileName = 'list4';
+global.foldNameTail = '-prod-check-0205';
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {
@@ -17,7 +17,7 @@ process.argv.forEach((item, index) => {
 
     global[par[0]] = par[1];
 });
-console.log('============');
+console.log('============1');
 
 const listName = fileName;
 
