@@ -101,7 +101,7 @@ const execute = (updateArr) => {
 
 const executer = async(updateArr, isLastOne = false) => {
     let jobs = [];
-    const max = 30;
+    const max = 10;
 
     jobs.push(execute(updateArr));
 

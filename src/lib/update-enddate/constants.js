@@ -3,10 +3,10 @@
 const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
-global.NODE_ENV = 'production'; // production
-global.shouldUpdate = false;
+global.NODE_ENV = 'qa'; // production //qa
+global.shouldUpdate = 'true';
 global.fileName = 'list4';
-global.foldNameTail = '-prod-check-0205';
+global.foldNameTail = '-qa-run-0206';
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {
@@ -80,6 +80,7 @@ if (NODE_ENV === 'qa') {
 xoDs.config(config.xoDsConfig);
 
 const isUpdateByApi = shouldUpdate === 'true';
+console.log("isUpdateByApi: ", isUpdateByApi);
 // const isUpdateByApi = false
 
 const DB = 'storefront';
