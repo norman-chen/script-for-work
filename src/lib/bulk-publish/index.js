@@ -11,19 +11,19 @@ const constants = {
 };
 
 const storefrontIds = [
-    '1bf5c89b-3f32-4deb-ba9a-a47300f6f35c'
+
 ]
 
 ;(async() => {
     await rp({
         method : 'POST',
-        uri    : `https://qa-storefront-api.localsolutions.theknot.com/storefronts/bulk-publish?apikey=${constants.apikey}`,
+        uri    : `${constants.sfUri}/storefronts/bulk-publish?apikey=${constants.apikey}`,
         headers: {
             authorization: `Bearer ${constants.token}`
         },
         body: {
             storefrontIds,
-            sections: ['gallery', 'detail', 'sales']
+            sections: ['detail']
         },
         json: true
     });
