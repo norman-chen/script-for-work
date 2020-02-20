@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "boom": "4.x.x",
+    "contentful": "^7.13.1",
+    "contentful-management": "^5.12.2",
     "csvtojson": "2.0.10",
     "hoek": "4.x.x",
     "joi": "10.x.x",
