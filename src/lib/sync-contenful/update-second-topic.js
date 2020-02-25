@@ -17,9 +17,14 @@
     // })
     // console.log('=================')
 
-    // const entry = await envr.getEntries({'content_type': 'guide_article'})
-    const entry = await envr.getEntry('5uRNtApaUcLPfJPa77ozyE')
-    console.dir(entry, {depth: 9})
+    const { items: entry } = await envr.getEntries({
+        'content_type': 'guide_article',
+        'fields.primary_stage_topic.sys.id[match]': '1Y2YrfgaZeoOIiKmycew0q',
+        'fields.secondary_stage_topics.sys.id[match]': '6Qjl5KiotyWX1I6vBDRcsz'
+    })
+    // const entry = await envr.getEntry('5uRNtApaUcLPfJPa77ozyE')
+    console.dir(entry[0], {depth: 9})
+    console.log(entry.length)
 
     return
 
