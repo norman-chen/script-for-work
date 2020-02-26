@@ -26,22 +26,24 @@
     console.dir(entry[0], {depth: 9})
     console.log(entry.length)
 
-    return
+    // return
 
-    entry.fields.secondary_stage_topics = {
-        'en-US': [
-            ...entry.fields.secondary_stage_topics['en-US'],
-            {
-                sys: {
-                    type: 'Link',
-                    linkType: 'Entry',
-                    id: '2GaVVJZpQIqQKY4KmMkw2C'
-                }
-            }
-        ]
-    }
+    // entry.fields.secondary_stage_topics = {
+    //     'en-US': [
+    //         ...entry.fields.secondary_stage_topics['en-US'],
+    //         {
+    //             sys: {
+    //                 type: 'Link',
+    //                 linkType: 'Entry',
+    //                 id: '2GaVVJZpQIqQKY4KmMkw2C'
+    //             }
+    //         }
+    //     ]
+    // }
 
-    await entry.update()
+    console.log(entry[0].update().catch(() => {}))
+
+    // await entry.update()
 
 
     // 5uRNtApaUcLPfJPa77ozyE How to test jwplayer
