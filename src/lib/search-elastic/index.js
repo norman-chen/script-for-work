@@ -54,17 +54,17 @@ xoDs.config(config.xoDsConfig);
     console.dir(storefrontIds, {depth: 9})
 
     return
-    for (let i = 0; i < storefrontIds.length; i++) {
-        const id = storefrontIds[i];
+    // for (let i = 0; i < storefrontIds.length; i++) {
+    //     const id = storefrontIds[i];
 
-        await xoDs.es.api(
-            'admin',
-            'delete',
-            {
-                index: 'admin',
-                type : 'profiles',
-                id,
-            }
-        );
-    }
+    //     await xoDs.es.api(
+    //         'admin',
+    //         'delete',
+    //         {
+    //             index: 'admin',
+    //             type : 'profiles',
+    //             id,
+    //         }
+    //     );
+    // }
 })()
