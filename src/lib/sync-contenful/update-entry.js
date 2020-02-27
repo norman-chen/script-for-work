@@ -18,7 +18,16 @@ const targetList = [
         newTopic: 'id2'
     }
 ];
-const contentTypes = [];
+const contentTypes = [
+    'guide_article',
+    'guide_qa', // no secondary
+    'guide_slideshow',
+    'news',
+    'news_slideshow',
+    'guideWeekByWeek',
+    'guideBabyMonthByMonth', // no
+    'tools_article'
+];
 
 let bulkBuffer = [];
 const bulkUpdateEntries = (entry, isLast = false) => {
@@ -29,6 +38,7 @@ const bulkUpdateEntries = (entry, isLast = false) => {
         bulkBuffer = [];
     }
 }
+
 
 const primaryUpdateForLimit = async (contentType, oldTopic, newTopic) => {
     const { items: entries } = await Envr.getEntries({

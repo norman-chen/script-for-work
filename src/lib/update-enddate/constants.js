@@ -3,10 +3,10 @@
 const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
-global.NODE_ENV = 'production'; // production //qa
-global.shouldUpdate = 'true';
-global.fileName = 'list4-fail';
-global.foldNameTail = '-prod-run-0207';
+global.NODE_ENV = 'production'; // production // qa
+global.shouldUpdate = 'false';
+global.fileName = 'list5-1';
+global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate}-0227`;
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {
