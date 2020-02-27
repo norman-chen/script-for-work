@@ -6,7 +6,7 @@ const xoDs = new XoDs();
 global.NODE_ENV = 'production'; // production // qa
 global.shouldUpdate = 'false';
 global.fileName = 'list5-1';
-global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate}-0227`;
+global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-0227`;
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {
@@ -80,7 +80,7 @@ if (NODE_ENV === 'qa') {
 xoDs.config(config.xoDsConfig);
 
 const isUpdateByApi = shouldUpdate === 'true';
-console.log("isUpdateByApi: ", isUpdateByApi);
+console.log('isUpdateByApi: ', isUpdateByApi);
 // const isUpdateByApi = false
 
 const DB = 'storefront';

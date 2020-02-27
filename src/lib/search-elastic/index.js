@@ -3,13 +3,13 @@ const xoDs = new XoDs();
 
 const config = {
     xoDsConfig: {
-        "read-store": {
+        'read-store': {
             // "admin": {
             //     "host": "https://search-xo-local-partners-qa-wb6kullmuwb25jie2d735peq6i.us-east-1.es.amazonaws.com"
             // }
 
-            "admin": {
-                "host": "https://search-xo-local-partners-prod-ap25bstxjtk5xaxpvu3jxmajh4.us-east-1.es.amazonaws.com"
+            admin: {
+                host: 'https://search-xo-local-partners-prod-ap25bstxjtk5xaxpvu3jxmajh4.us-east-1.es.amazonaws.com'
             }
         }
     },
@@ -19,7 +19,7 @@ const config = {
 xoDs.config(config.xoDsConfig);
 
 
-;(async () => {
+;(async() => {
     // salesProfiles
 
     const a = await xoDs.es.api(
@@ -28,7 +28,7 @@ xoDs.config(config.xoDsConfig);
         {
             index: 'admin',
             type : 'profiles',
-            body: {
+            body : {
                 query: {
                     bool: {
                         must_not: {
@@ -40,20 +40,20 @@ xoDs.config(config.xoDsConfig);
                 }
             },
             _source: ['salesProfiles'],
-            size: 100
+            size   : 100
         }
     );
 
-    const storefrontIds = []
-    a.hits.hits.forEach(hh => {
+    const storefrontIds = [];
+    a.hits.hits.forEach((hh) => {
         // console.log(hh._id)
-        hh._id.length === 36 && storefrontIds.push(hh._id)
+        hh._id.length === 36 && storefrontIds.push(hh._id);
     });
 
     // console.log(a.hits.total)
-    console.dir(storefrontIds, {depth: 9})
+    console.dir(storefrontIds, {depth: 9});
 
-    return
+    return;
     // for (let i = 0; i < storefrontIds.length; i++) {
     //     const id = storefrontIds[i];
 
@@ -67,4 +67,4 @@ xoDs.config(config.xoDsConfig);
     //         }
     //     );
     // }
-})()
+})();
