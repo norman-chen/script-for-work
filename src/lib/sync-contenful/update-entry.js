@@ -5,7 +5,7 @@ const contentfulMgr = require('contentful-management');
 // write key
 const key = 'CFPAT-ILaUO0N2TFy3ITjtBXYOJgiEPPS0GNSW8RLP2dhTcAA';
 
-const env = 'qa';
+const env = 'production';
 const limit = 200;
 const bulkUpdateLen = 30;
 const isUpdate = false;
@@ -25,14 +25,46 @@ const contentTypes = [
 
 let bulkBuffer = [];
 const bulkUpdateEntries = async(entry, isLast = false) => {
+    if (!isUpdate) { return }
+
     bulkBuffer.push(entry.update().catch(() => {}));
 
     if (bulkBuffer.length === bulkUpdateLen || isLast) {
         await Promise.all(bulkBuffer);
         bulkBuffer = [];
+
+        await Promise.delay(1000);
     }
 };
 
+const counting = {};
+const countingNum = (contentType, topic, num) => {
+    if (!counting[topic]) {
+        counting[topic] = {
+            [contentType]: num
+        }
+        return
+    }
+
+    if (counting[topic][contentType] === undefined) {
+        counting[topic][contentType] = num
+        return
+    }
+
+    counting[topic][contentType]+=num
+}
+
+const mappingNum = () => {
+    let mapCount = {};
+
+    Object.keys(counting).forEach(k => {
+        const name = targetList.find(tar => tar.oldTopic === k).name;
+
+        mapCount[name] = counting[k]
+    });
+
+    console.dir(mapCount)
+}
 
 const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
     const { items: entries } = await Envr.getEntries({
@@ -42,8 +74,8 @@ const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
     });
 
     if (!isUpdate) {
-        console.log(`primary ${contentType} ${oldTopic} ${entries.length}`);
-
+        // console.log(`primary ${contentType} ${oldTopic} ${entries.length}`);
+        countingNum(contentType, oldTopic, entries.length)
         return;
     }
 
@@ -74,8 +106,8 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
     });
 
     if (!isUpdate) {
-        console.log(`primary ${contentType} ${oldTopic} ${entries.length}`);
-
+        // console.log(`secondary ${contentType} ${oldTopic} ${entries.length}`);
+        countingNum(contentType, oldTopic, entries.length)
         return;
     }
 
@@ -116,12 +148,17 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
                 await primaryUpdateForLimit(Envr, contentType, oldTopic, newTopic);
                 await secondaryUpdateForLimit(Envr, contentType, oldTopic, newTopic);
             } catch (error) {
-                console.log('====ERROR====');
-                console.log(`${contentType},${oldTopic},${newTopic}`);
-                console.log('====ERROR====');
+                // console.log('====ERROR====');
+                // console.log(`${contentType},${oldTopic},${newTopic},${error.message}`);
+                // console.log('====ERROR====');
             }
 
-            console.log(`Done for contentType ${contentType} in topic ${oldTopic}`);
+            console.log(`-----Done for contentType ${contentType} in topic ${oldTopic}`);
         }
     }
+
+    // console.dir(counting);
+
+    mappingNum();
+
 })();

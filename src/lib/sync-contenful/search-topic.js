@@ -22,7 +22,7 @@ const qaClient = contentful.createClient({
     accessToken: qa.accessToken
 });
 
-const Client = qaClient;
+const Client = prodClient;
 
 // config
 const contentType = 'stageTopic'
