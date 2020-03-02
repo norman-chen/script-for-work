@@ -8,7 +8,7 @@ const key = 'CFPAT-ILaUO0N2TFy3ITjtBXYOJgiEPPS0GNSW8RLP2dhTcAA';
 const env = 'qa';
 const limit = 200;
 const bulkUpdateLen = 30;
-const isUpdate = true;
+const isUpdate = false;
 
 const { targetListPROD, targetListQA } = require('./constants');
 const targetList = env === 'production' ? targetListPROD : targetListQA;
