@@ -4,9 +4,9 @@ const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
 global.NODE_ENV = 'production'; // production // qa
-global.shouldUpdate = 'false';
+global.shouldUpdate = 'true';
 global.fileName = 'list5-1';
-global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-0227`;
+global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-0228`;
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {

@@ -17,14 +17,24 @@
     // })
     // console.log('=================')
 
-    const { items: entry } = await envr.getEntries({
-        content_type                                 : 'guide_article',
-        'fields.primary_stage_topic.sys.id[match]'   : '1Y2YrfgaZeoOIiKmycew0q',
-        'fields.secondary_stage_topics.sys.id[match]': '6Qjl5KiotyWX1I6vBDRcsz'
-    });
-    // const entry = await envr.getEntry('5uRNtApaUcLPfJPa77ozyE')
-    console.dir(entry[0], {depth: 9});
-    console.log(entry.length);
+    // const { items: entry } = await envr.getEntries({
+    //     content_type                                 : 'guide_article',
+    //     'fields.primary_stage_topic.sys.id[match]'   : '1Y2YrfgaZeoOIiKmycew0q',
+    //     'fields.secondary_stage_topics.sys.id[match]': '6Qjl5KiotyWX1I6vBDRcsz'
+    // });
+    // // const entry = await envr.getEntry('5uRNtApaUcLPfJPa77ozyE')
+    // console.dir(entry[0], {depth: 9});
+    // console.log(entry.length);
+
+    const entry = await envr.getEntry('1tTOJ0LC5uA8COAagqoQA0');
+    // console.dir(entry, {depth: 9});
+
+    const topicIdx = entry.fields.secondary_stage_topics['en-US']
+            .findIndex((item) => item.sys.id === '6oTwWtzqRG6eo8mA88yEQs');
+
+            console.log(topicIdx)
+    // entry.fields.secondary_stage_topics['en-US'][topicIdx].sys.id = newTopic;
+
 
     // return
 
@@ -41,7 +51,7 @@
     //     ]
     // }
 
-    console.log(entry[0].update().catch(() => {}));
+    // console.log(entry[0].update().catch(() => {}));
 
     // await entry.update()
 

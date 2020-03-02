@@ -5,10 +5,10 @@ const contentfulMgr = require('contentful-management');
 // write key
 const key = 'CFPAT-ILaUO0N2TFy3ITjtBXYOJgiEPPS0GNSW8RLP2dhTcAA';
 
-const env = 'production';
+const env = 'qa';
 const limit = 200;
 const bulkUpdateLen = 30;
-const isUpdate = false;
+const isUpdate = true;
 
 const { targetListPROD, targetListQA } = require('./constants');
 const targetList = env === 'production' ? targetListPROD : targetListQA;
@@ -25,9 +25,11 @@ const contentTypes = [
 
 let bulkBuffer = [];
 const bulkUpdateEntries = async(entry, isLast = false) => {
-    if (!isUpdate) { return }
+    if (!isUpdate) { return; }
 
-    bulkBuffer.push(entry.update().catch(() => {}));
+    bulkBuffer.push(entry.update().catch((err) => {
+        console.log(err)
+    }));
 
     if (bulkBuffer.length === bulkUpdateLen || isLast) {
         await Promise.all(bulkBuffer);
@@ -38,33 +40,47 @@ const bulkUpdateEntries = async(entry, isLast = false) => {
 };
 
 const counting = {};
-const countingNum = (contentType, topic, num) => {
+const countingNum = (contentType, topic, num,  ids) => {
     if (!counting[topic]) {
         counting[topic] = {
-            [contentType]: num
-        }
-        return
+            [contentType]: ids
+        };
+
+        return;
     }
 
     if (counting[topic][contentType] === undefined) {
-        counting[topic][contentType] = num
-        return
+        counting[topic][contentType] = ids;
+
+        return;
     }
 
-    counting[topic][contentType]+=num
-}
+    counting[topic][contentType].push(...ids);
+};
 
 const mappingNum = () => {
-    let mapCount = {};
+    const mapCount = {};
+    let sum = 0;
 
-    Object.keys(counting).forEach(k => {
-        const name = targetList.find(tar => tar.oldTopic === k).name;
+    Object.keys(counting).forEach((k) => {
+        const name = targetList.find((tar) => tar.oldTopic === k).name;
 
-        mapCount[name] = counting[k]
+        mapCount[name] = {};
+
+        Object.keys(counting[k]).forEach((kk) => {
+            const list = Array.from(new Set((counting[k][kk])))
+            const len = list.length;
+            mapCount[name][kk] = len;
+            sum += len;
+
+            len && console.log(`${[name]},${k},${kk},${len}`)
+        });
     });
 
-    console.dir(mapCount)
-}
+    // console.dir(mapCount);
+    console.log(sum);
+
+};
 
 const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
     const { items: entries } = await Envr.getEntries({
@@ -75,7 +91,8 @@ const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
 
     if (!isUpdate) {
         // console.log(`primary ${contentType} ${oldTopic} ${entries.length}`);
-        countingNum(contentType, oldTopic, entries.length)
+        countingNum(contentType, oldTopic, entries.length, entries.map((e) => e.sys.id));
+
         return;
     }
 
@@ -107,7 +124,8 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
 
     if (!isUpdate) {
         // console.log(`secondary ${contentType} ${oldTopic} ${entries.length}`);
-        countingNum(contentType, oldTopic, entries.length)
+        countingNum(contentType, oldTopic, entries.length, entries.map((e) => e.sys.id));
+
         return;
     }
 
@@ -115,7 +133,11 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
         const entry = entries[i];
 
         const topicIdx = entry.fields.secondary_stage_topics['en-US']
-            .find((item) => item.sys.id === oldTopic);
+            .findIndex((item) => item.sys.id === oldTopic);
+
+        if (topicIdx === -1) {
+            continue
+        }
 
         entry.fields.secondary_stage_topics['en-US'][topicIdx].sys.id = newTopic;
 
@@ -153,12 +175,11 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
                 // console.log('====ERROR====');
             }
 
-            console.log(`-----Done for contentType ${contentType} in topic ${oldTopic}`);
+            // console.log(`-----Done for contentType ${contentType} in topic ${oldTopic}`);
         }
     }
 
     // console.dir(counting);
 
     mappingNum();
-
 })();
