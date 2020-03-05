@@ -1,14 +1,14 @@
 const targetListPROD = [
-    // {
-    //     oldTopic: 'c1qZumRx6gOUkmC4I8eMw',
-    //     newTopic: '',
-    //     name    : 'ttc-adoption'
-    // },
-    // {
-    //     oldTopic: '2TWXoSZNOMkyCocQUoiKO6',
-    //     newTopic: '',
-    //     name    : 'ttc-surrogacy'
-    // },
+    {
+        oldTopic: 'c1qZumRx6gOUkmC4I8eMw',
+        newTopic: '50Nm0tgfYR0tFNEEadZLTs',
+        name    : 'ttc-adoption'
+    },
+    {
+        oldTopic: '2TWXoSZNOMkyCocQUoiKO6',
+        newTopic: '50Nm0tgfYR0tFNEEadZLTs',
+        name    : 'ttc-surrogacy'
+    },
 
     {
         oldTopic: '324Ztwd6Kk8Eyimk2WSwGO',
@@ -32,16 +32,16 @@ const targetListPROD = [
         name    : 'parenting-sun-safety'
     },
 
-    // {
-    //     oldTopic: '4HusAMxvDy8aqC482U8IYY',
-    //     newTopic: '',
-    //     name    : 'parenting-sids'
-    // },
-    // {
-    //     oldTopic: 'xQ3nHSKPe0wooSau8AMGK',
-    //     newTopic: '',
-    //     name    : 'parenting-cosleeping'
-    // },
+    {
+        oldTopic: '4HusAMxvDy8aqC482U8IYY',
+        newTopic: '5xofPFyNmPLyChqYmgkZEz',
+        name    : 'parenting-sids'
+    },
+    {
+        oldTopic: 'xQ3nHSKPe0wooSau8AMGK',
+        newTopic: '5xofPFyNmPLyChqYmgkZEz',
+        name    : 'parenting-cosleeping'
+    },
 
     {
         oldTopic: '5a3hfp3CrmowC0yGGuocY4',
@@ -104,10 +104,10 @@ let targetListQA = [
     }
 ]
 
-targetListQA = targetListQA.map((item, index) => ({
-    ...item,
-    name: targetListPROD[index].name
-}));
+// targetListQA = targetListQA.map((item, index) => ({
+//     ...item,
+//     name: targetListPROD[index].name
+// }));
 
 module.exports = {
     targetListPROD,

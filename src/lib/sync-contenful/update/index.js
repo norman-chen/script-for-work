@@ -5,9 +5,9 @@ const contentfulMgr = require('contentful-management');
 // write key
 const key = 'CFPAT-ILaUO0N2TFy3ITjtBXYOJgiEPPS0GNSW8RLP2dhTcAA';
 
-const env = 'qa';
+const env = 'production';
 const limit = 200;
-const bulkUpdateLen = 30;
+const bulkUpdateLen = 1;
 const isUpdate = false;
 
 const { targetListPROD, targetListQA } = require('./constants');
@@ -28,6 +28,7 @@ const bulkUpdateEntries = async(entry, isLast = false) => {
     if (!isUpdate) { return; }
 
     bulkBuffer.push(entry.update().catch((err) => {
+        console.log('---??')
         console.log(err)
     }));
 
@@ -35,7 +36,7 @@ const bulkUpdateEntries = async(entry, isLast = false) => {
         await Promise.all(bulkBuffer);
         bulkBuffer = [];
 
-        await Promise.delay(1000);
+        await Promise.delay(500);
     }
 };
 
