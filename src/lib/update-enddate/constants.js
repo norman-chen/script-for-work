@@ -4,9 +4,11 @@ const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
 global.NODE_ENV = 'production'; // production // qa
-global.shouldUpdate = 'true';
-global.fileName = 'list5-1';
-global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-0228`;
+global.shouldUpdate = 'false'; // 'false' || 'true'
+global.fileName = 'list4';
+
+const date = `${new Date().getMonth()}-${new Date().getDate()}`;
+global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-${date}`;
 
 console.log('====Args=====');
 process.argv.forEach((item, index) => {
