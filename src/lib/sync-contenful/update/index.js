@@ -40,6 +40,7 @@ const bulkUpdateEntries = async(entry, isLast = false) => {
     }
 };
 
+const idsForSum = [];
 const counting = {};
 const countingNum = (contentType, topic, num,  ids) => {
     if (!counting[topic]) {
@@ -57,6 +58,8 @@ const countingNum = (contentType, topic, num,  ids) => {
     }
 
     counting[topic][contentType].push(...ids);
+
+    idsForSum.push(...ids)
 };
 
 const mappingNum = () => {
@@ -80,7 +83,8 @@ const mappingNum = () => {
 
     // console.dir(mapCount);
     console.log(sum);
-
+    // console.log('--------')
+    // idsForSum.forEach(id => console.log(`'${id}',`))
 };
 
 const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
@@ -94,6 +98,7 @@ const primaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => {
         // console.log(`primary ${contentType} ${oldTopic} ${entries.length}`);
         countingNum(contentType, oldTopic, entries.length, entries.map((e) => e.sys.id));
 
+        entries.forEach(entry => console.log(`primary,${contentType},${oldTopic},${entry.sys.id},${entry.fields.slug['en-US']}`))
         return;
     }
 
@@ -126,7 +131,7 @@ const secondaryUpdateForLimit = async(Envr, contentType, oldTopic, newTopic) => 
     if (!isUpdate) {
         // console.log(`secondary ${contentType} ${oldTopic} ${entries.length}`);
         countingNum(contentType, oldTopic, entries.length, entries.map((e) => e.sys.id));
-
+        entries.forEach(entry => console.log(`secondary,${contentType},${oldTopic},${entry.sys.id},${entry.fields.slug['en-US']}`))
         return;
     }
 
