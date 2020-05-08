@@ -4,8 +4,8 @@ const XoDs = require('xo-ds-handler');
 const xoDs = new XoDs();
 
 global.NODE_ENV = 'production'; // production // qa
-global.shouldUpdate = 'false'; // 'false' || 'true'
-global.fileName = 'list4';
+global.shouldUpdate = 'true'; // 'false' || 'true'
+global.fileName = 'list8';
 
 const date = `${new Date().getMonth()}-${new Date().getDate()}`;
 global.foldNameTail = `-${global.NODE_ENV}-${global.shouldUpdate === 'true' ? 'run' : 'check'}-${date}`;

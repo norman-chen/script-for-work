@@ -15,9 +15,9 @@ const entryPoints = function(server, plugin) {
         path   : '/plugin/say-hey',
         handler: plugin.sayHey,
         config : {
-            //Support for swagger, look at the hapi-swagger documentation for more options
-            //When params/query/payload joi validation are used, model contract will generate
-            //into swagger documentation
+            // Support for swagger, look at the hapi-swagger documentation for more options
+            // When params/query/payload joi validation are used, model contract will generate
+            // into swagger documentation
             tags       : ['api'],
             description: 'say-hey'
         }
