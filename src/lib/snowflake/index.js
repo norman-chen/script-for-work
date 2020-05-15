@@ -15,7 +15,8 @@ class Snowflake {
         return new Promise((resolve, reject) => {
             connection.connect((error) => {
                 if (error) {
-                    return reject(new ConnectSnowflakeError(error.message));
+                    console.log(error)
+                    return reject(error.message);
                 }
 
                 resolve(connection);
@@ -33,7 +34,7 @@ class Snowflake {
                             connection.destroy();
 
                             if (error) {
-                                return reject(new QuerySnowflakeError(error.message));
+                                return reject(error.message);
                             }
 
                             resolve(rows);
@@ -54,14 +55,17 @@ class Snowflake {
 ;(async () => {
     const snow = new Snowflake({options: {
         "account": "xo",
-        "username": "svcprdsfmyacct",
-        "password": "YVUZmMva7t_m",
+        "username": "SVCPRDSFMYACCT".toUpperCase(),
+        "password": "canner-MtfDEEk2VxA",
         "warehouse": "LOCAL_LOAD_WH"
     }})
 
-    const s = await snow.execute(`select accountId, STOREFRONTID, MARKETCODE, MEMBER, CITY, STATE,ACTUALDATE, MEASURETYPE, USERID from VTR.USERACTIVITY
-    where MEASURETYPE = 'Reviewed' and storefrontid = '5f0335c9-5508-49b0-ac3e-a2220170b937' and year = 2019
-    limit 100`)
+    for (let i = 0; i < 15; i++) {
+        const s = await snow.execute(`select accountId, STOREFRONTID, MARKETCODE, MEMBER, CITY, STATE,ACTUALDATE, MEASURETYPE, USERID from VTR.USERACTIVITY
+        where MEASURETYPE = 'Reviewed' and storefrontid = '5f0335c9-5508-49b0-ac3e-a2220170b937' and year = 2019
+        limit 1`)
 
-    console.log(s)
+        console.log(s)
+    }
+
 })()
