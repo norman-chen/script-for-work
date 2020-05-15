@@ -19,7 +19,7 @@
     "eslint-plugin-xogroup": "2.3.1",
     "mocha": "3.x.x",
     "xo-ds-handler": "*",
-    "xo-rabbit": "9.0.0",
+    "xo-rabbit": "^9.0.0",
     "xo-test-helper": "*"
   },
   "peerDependencies": {
