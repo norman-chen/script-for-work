@@ -65,14 +65,26 @@ need to check the configuation in the file first
  - business login
     1. stats-publihser run at 7:300 pm every day, emit storefrontId and new_index and switch_index_event
     2. stats-indexer received the event and get the data from snowflake and sync to ES, if getting the switch_index_event then it will switch the index and delete the old one
-    3. done
+
+    NOTE:
+    1. qa and production stats ES are same
+    2. stats-indexer didn't run on QA, the development branch merge to production directly
+    3. stats-publishe didn't run on QA, development branch merge to production directly
  - some api change
  - es issue and monitor
 #### the new v2 api
  - get sales
+    for GP get sales to build thire fulfillment
  - accounts
+    v2/accounts get by crmAccount
  - lead
+    1. get 36 months lead data from sonwflake directly
+    2. by locations or crmAccount
  - search storefront by location or crmAccount
 
+### conversation
+    segmentIO-worker -> hapi-segment -> conversation_created
+
+    the receivedAt is not support by the segment, so it not correct
 
 
