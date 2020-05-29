@@ -42,6 +42,8 @@ and attach the file
 `list10-map` to the ticket as well
 
 #### gallery position fix
+`node src/lib/reset-position/index.js --NODE_ENV=production`
+`node src/lib/reset-position/index.js --NODE_ENV=qa`
 
 #### some token generate
 GET a integration token
