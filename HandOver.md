@@ -51,6 +51,7 @@ GET a integration token
 
 
 ##### ES relative
+in src/es-doc
 
 ##### taxonomy
 GET a taxnomy api response
